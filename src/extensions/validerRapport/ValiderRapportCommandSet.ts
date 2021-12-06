@@ -97,26 +97,7 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
     const _folderRacineItem:any = await _folderRacine.getItem();
     let _item:any = await _folderRacineItem.get();
     console.log("_item => ",_item)
-    console.log("Taux_x0020_de_x0020_validation", await _item.Taux_x0020_de_x0020_validation);
-    let Taux_de_validation = await _item.Taux_x0020_de_x0020_validation;
-    let ItemChildCount = await _item.FolderChildCount;
-    console.log("ItemChildCount", ItemChildCount);
-    let new_taux = Taux_de_validation+1/count;
-    console.log("new taux", new_taux);
-    let statut_de_traitement = null;
-    if(new_taux===0){
-      statut_de_traitement = "Non commencé";
-    }
-    if(new_taux>0){
-      statut_de_traitement = "En cours";
-    }
-    if(new_taux===1){
-      statut_de_traitement = "Traité";
-    }
-    await _folderRacineItem.update({
-      Taux_x0020_de_x0020_validation: new_taux,
-      Statut_x0020_de_x0020_Traitement: statut_de_traitement
-    });
+
     const obj = await sp.web.firstUniqueAncestorSecurableObject.get();
     console.log("firstUniqueAncestorSecurableObject", obj);
     const perms2 = await sp.web.getCurrentUserEffectivePermissions();
