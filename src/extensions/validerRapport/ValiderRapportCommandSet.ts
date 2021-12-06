@@ -47,7 +47,6 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
   @override
   public onExecute(event: IListViewCommandSetExecuteEventParameters): void {
     let id_rapport:number = event.selectedRows[0].getValueByName("ID");
-    let ItemChildCount:number = event.selectedRows[0].getValueByName("ItemChildCount");
     console.log("rapport: ", event.selectedRows[0]);
     let FileRef = event.selectedRows[0].getValueByName("FileRef");
     let folderRacine = FileRef.split('/sites/DEXA2022/Grands Projets 2022/')[1];// xx
@@ -60,7 +59,7 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
       case 'COMMAND_1':
         Dialog.alert(`${this.properties.sampleTextOne}`);
         const FileLeafRef = event.selectedRows[0].getValueByName("FileLeafRef");
-        this.validerRapport(id_rapport, folderRacine, folderRacineName);
+        this.validerRapport(id_rapport, FileRef);
         break;
       default:
         throw new Error('Unknown command');
@@ -70,7 +69,7 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
     let user = await sp.site.rootWeb.ensureUser(email);
     return user;
   }
-  private async validerRapport(id_rapport:number, folderRacine:string, folderRacineName:string ){
+  private async validerRapport(id_rapport:number, folderRacine:string){
     let items = await sp.web.lists.getByTitle("Rapports 2022").items.getAll();
     var userEmail = this.context.pageContext.user.email;
     console.log("userId", await this.getUser(userEmail));
@@ -80,7 +79,7 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
       validateur_refId: userId,
       date_x0020_de_x0020_validation: new Date().toLocaleString("fr-MA", {timeZone: "Africa/Casablanca"})
     });
-    const folder = sp.web.getFolderByServerRelativePath("Grands Projets 2022/"+folderRacine);////"+FileLeafRef);
+    const folder = sp.web.getFolderByServerRelativePath(folderRacine);////"+FileLeafRef);
     const folderItem = await folder.getItem();
     await folderItem.breakRoleInheritance(false);
     const { Id: roleDefId } = await sp.web.roleDefinitions.getByName('Read').get();
@@ -88,15 +87,6 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
     await folderItem.roleAssignments.add(5, roleDefId);
     const roles = await folderItem.roleAssignments.get();
     console.log("folder roles", roles);
-    //let _item:any = await folderItem.get();
-    const _folderRacine:any = await sp.web.getFolderByServerRelativePath("Grands Projets 2022/"+folderRacineName);
-    
-    let all_folders:any = await _folderRacine.folders.get();
-    let count:any = all_folders.length;
-    console.log("count", count);
-    const _folderRacineItem:any = await _folderRacine.getItem();
-    let _item:any = await _folderRacineItem.get();
-    console.log("_item => ",_item)
 
     const obj = await sp.web.firstUniqueAncestorSecurableObject.get();
     console.log("firstUniqueAncestorSecurableObject", obj);
