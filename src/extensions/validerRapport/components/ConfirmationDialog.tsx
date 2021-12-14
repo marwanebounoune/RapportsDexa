@@ -57,13 +57,13 @@ export default class ConfirmationDialog extends BaseDialog {
           validateur_refId: userId,
           date_x0020_de_x0020_validation: _date
         });
-        const folder = sp.web.getFolderByServerRelativePath(folderRacine);////"+FileLeafRef);
+        /*const folder = sp.web.getFolderByServerRelativePath(folderRacine);////"+FileLeafRef);
         const folderItem = await folder.getItem();
         await folderItem.breakRoleInheritance(false);
         const { Id: roleDefId } = await sp.web.roleDefinitions.getByName('Read').get();
         //id=5 for members
         await folderItem.roleAssignments.add(5, roleDefId);
-        /*const roles = await folderItem.roleAssignments.get();
+        const roles = await folderItem.roleAssignments.get();
         console.log("folder roles", roles);
     
         const obj = await sp.web.firstUniqueAncestorSecurableObject.get();
