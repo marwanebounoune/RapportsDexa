@@ -8,10 +8,11 @@ import {
 } from '@microsoft/sp-listview-extensibility';
 import { Dialog } from '@microsoft/sp-dialog';
 
-import * as strings from 'ValiderRapportCommandSetStrings';
+import ConfirmationDialog from './components/ConfirmationDialog';
+import "@pnp/sp/folders";
+import { getUser } from './utils';
 import { sp } from "@pnp/sp/presets/all";
 import "@pnp/sp/folders";
-import pnp from 'sp-pnp-js';
 /**
  * If your command set uses the ClientSideComponentProperties JSON input,
  * it will be deserialized into the BaseExtension.properties object.
@@ -23,6 +24,7 @@ export interface IValiderRapportCommandSetProperties {
   sampleTextTwo: string;
 }
 let Libraryurl:string = null;
+let userEmail:string = null;
 const LOG_SOURCE: string = 'ValiderRapportCommandSet';
 
 export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IValiderRapportCommandSetProperties> {
@@ -34,71 +36,49 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
   }
 
   @override
-  public onListViewUpdated(event: IListViewCommandSetListViewUpdatedParameters): void {
+  public onListViewUpdated(event: IListViewCommandSetListViewUpdatedParameters) {
     const compareOneCommand: Command = this.tryGetCommand('COMMAND_1');
     Libraryurl = this.context.pageContext.list.title;
+        
     console.log("Libraryurl", Libraryurl);
     if (compareOneCommand) {
       // This command should be hidden unless exactly one row is selected.
-      compareOneCommand.visible = event.selectedRows.length === 1 && event.selectedRows[0].getValueByName("statut_rapport") != "Validé à livré";
+      compareOneCommand.visible = event.selectedRows.length === 1 && (event.selectedRows[0].getValueByName("statut_rapport") === "Traité à valider" && (Libraryurl === "Grands Projets 2022" || Libraryurl === "Rapports 2022"));
     }
   }
 
   @override
-  public onExecute(event: IListViewCommandSetExecuteEventParameters): void {
+  public async onExecute(event: IListViewCommandSetExecuteEventParameters): Promise<void> {
     let id_rapport:number = event.selectedRows[0].getValueByName("ID");
     console.log("rapport: ", event.selectedRows[0]);
     let FileRef = event.selectedRows[0].getValueByName("FileRef");
-    let folderRacine = FileRef.split('/sites/DEXA2022/Grands Projets 2022/')[1];// xx
-    let folderRacineName = folderRacine.split('/')[0];
-    console.log("folder Racine", folderRacine);
-    console.log("folder Racine Name", folderRacineName);
-    let taux = event.selectedRows[0].getValueByName("Taux_x0020_de_x0020_validation");
-    console.log("taux", taux.toFixed(0));
+    
+    userEmail = this.context.pageContext.user.email;
+    var userId = await (await getUser(userEmail)).data.Id;
+    
+    const validateur: any = await sp.web.lists.getByTitle("l_validateurs").items.getAll();
+    var query = function(element) {
+      return element.membre_refId === userId;
+    };
+    const isValidateur = validateur.filter(query).length === 0? false: true;
+    console.log("validateur", isValidateur);
     switch (event.itemId) {
       case 'COMMAND_1':
-        Dialog.alert(`${this.properties.sampleTextOne}`);
         const FileLeafRef = event.selectedRows[0].getValueByName("FileLeafRef");
-        this.validerRapport(id_rapport, FileRef);
+        const confirmationDialog: ConfirmationDialog = new ConfirmationDialog();
+        confirmationDialog.userEmail=userEmail;
+        confirmationDialog.Libraryurl=Libraryurl;
+        confirmationDialog.id_rapport=id_rapport;
+        confirmationDialog.FileRef=FileRef;
+        if(isValidateur)
+          confirmationDialog.show();
+        else
+          Dialog.alert(`Vous n'êtes pas autorisé à effectuer cette action .`);
         break;
       default:
         throw new Error('Unknown command');
     }
   }
-  private async getUser(email: string) {
-    let user = await sp.site.rootWeb.ensureUser(email);
-    return user;
-  }
-  private async validerRapport(id_rapport:number, folderRacine:string){
-    let items = await sp.web.lists.getByTitle("Rapports 2022").items.getAll();
-    var userEmail = this.context.pageContext.user.email;
-    console.log("userId", await this.getUser(userEmail));
-    var userId = await (await this.getUser(userEmail)).data.Id;
-    let item = await sp.web.lists.getByTitle(Libraryurl).items.getById(id_rapport).update({
-      statut_rapport: "Validé à livré",
-      validateur_refId: userId,
-      date_x0020_de_x0020_validation: new Date().toLocaleString("fr-MA", {timeZone: "Africa/Casablanca"})
-    });
-    const folder = sp.web.getFolderByServerRelativePath(folderRacine);////"+FileLeafRef);
-    const folderItem = await folder.getItem();
-    await folderItem.breakRoleInheritance(false);
-    const { Id: roleDefId } = await sp.web.roleDefinitions.getByName('Read').get();
-    //id=5 for members
-    await folderItem.roleAssignments.add(5, roleDefId);
-    const roles = await folderItem.roleAssignments.get();
-    console.log("folder roles", roles);
 
-    const obj = await sp.web.firstUniqueAncestorSecurableObject.get();
-    console.log("firstUniqueAncestorSecurableObject", obj);
-    const perms2 = await sp.web.getCurrentUserEffectivePermissions();
-    console.log("getCurrentUserEffectivePermissions", perms2);
-    const groups = await sp.web.siteGroups();
-    console.log("groups", groups);
-    const def = await sp.web.roleDefinitions.get();
-    
-    console.log("def", def);
-    // Gets the associated members group of a web
-    const memberGroup = await sp.web.associatedMemberGroup();
-    console.log("memberGroup", memberGroup);
-  }
+
 }

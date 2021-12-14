@@ -17,7 +17,7 @@
 
   "items": {
     "COMMAND_1": {
-      "title": { "default": "Validé rapport" },
+      "title": { "default": "Valider rapport" },
       "iconImageUrl": "icons/request.png",
       "type": "command"
     }
