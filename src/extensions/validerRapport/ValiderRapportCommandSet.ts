@@ -55,11 +55,13 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
     
     const compareOneCommand: Command = this.tryGetCommand('COMMAND_1');
     const compareOneTwo: Command = this.tryGetCommand('COMMAND_2');
+    const compareOneTree: Command = this.tryGetCommand('COMMAND_3');
     Libraryurl = this.context.pageContext.list.title;
     if (compareOneCommand) {
       // This command should be hidden unless exactly one row is selected.
-      compareOneCommand.visible = event.selectedRows.length === 1 && (event.selectedRows[0].getValueByName("statut_rapport") === "Traité à valider" && (Libraryurl === "Grands Projets 2022" || Libraryurl === "Rapports 2022"));
+      compareOneCommand.visible = event.selectedRows.length === 1 && ((event.selectedRows[0].getValueByName("statut_rapport") === "Traité à valider" || event.selectedRows[0].getValueByName("statut_rapport") === "Réclamation") && (Libraryurl === "Grands Projets 2022" || Libraryurl === "Rapports 2022"));
       compareOneTwo.visible = event.selectedRows.length === 1 && (event.selectedRows[0].getValueByName("statut_rapport") === "Validé à livrer" && (Libraryurl === "Grands Projets 2022" || Libraryurl === "Rapports 2022"));
+      compareOneTree.visible = event.selectedRows.length === 1 && (event.selectedRows[0].getValueByName("statut_rapport") === "Livré" && (Libraryurl === "Grands Projets 2022" || Libraryurl === "Rapports 2022"));
     }
   }
 
@@ -92,13 +94,23 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
         else
           Dialog.alert(`Vous n'êtes pas autorisé à effectuer cette action.`);
         break;
-      
       case 'COMMAND_2':
         confirmationDialog.userEmail=userEmail;
         confirmationDialog.Libraryurl=Libraryurl;
         confirmationDialog.id_rapport=id_rapport;
         confirmationDialog.FileRef=FileRef;
         confirmationDialog.statut="Livré";
+        if(isLivreur)
+          confirmationDialog.show();
+        else
+          Dialog.alert(`Vous n'êtes pas autorisé à effectuer cette action.`);
+        break;
+      case 'COMMAND_3':
+        confirmationDialog.userEmail=userEmail;
+        confirmationDialog.Libraryurl=Libraryurl;
+        confirmationDialog.id_rapport=id_rapport;
+        confirmationDialog.FileRef=FileRef;
+        confirmationDialog.statut="Réclamation";
         if(isLivreur)
           confirmationDialog.show();
         else

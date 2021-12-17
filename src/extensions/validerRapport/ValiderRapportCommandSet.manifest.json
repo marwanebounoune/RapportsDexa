@@ -25,6 +25,11 @@
       "title": { "default": "Rapport livré" },
       "iconImageUrl": "icons/request.png",
       "type": "command"
+    },
+    "COMMAND_3": {
+      "title": { "default": "Réclamation" },
+      "iconImageUrl": "icons/request.png",
+      "type": "command"
     }
   }
 }
