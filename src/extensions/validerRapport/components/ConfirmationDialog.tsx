@@ -52,14 +52,8 @@ export default class ConfirmationDialog extends BaseDialog {
         //console.log("userId", await getUser(userEmail));
         var userId = await (await getUser(userEmail)).data.Id;
         //var date = new Date().toLocaleString("en-US", {timeZone: "Africa/Casablanca"});
-        var _date = new Date().toLocaleString();
-        //console.log("_date", _date);
-        sp.web.lists.getByTitle(Libraryurl).items.getById(id_rapport).update({
-            date_x0020_de_x0020_validation: _date
-        }).then(async res=>{
-            const itemlool = await res.item.get()
-            //console.log("date_x0020_de_x0020_validation", itemlool);
-        })
+        var _date = new Date().toISOString();
+        console.log("_date", _date);
         let item = await sp.web.lists.getByTitle(Libraryurl).items.getById(id_rapport).update({
           statut_rapport: "Validé à livrer",
           validateur_refId: userId,
@@ -94,12 +88,7 @@ export default class ConfirmationDialog extends BaseDialog {
 
     private async livrerRapport(Libraryurl:string, userEmail:string, id_rapport:number, folderRacine:string){
         var userId = await (await getUser(userEmail)).data.Id;
-        var _date = new Date().toLocaleString();
-        sp.web.lists.getByTitle(Libraryurl).items.getById(id_rapport).update({
-            date_x0020_de_x0020_validation: _date
-        }).then(async res=>{
-            const itemlool = await res.item.get()
-        })
+        var _date = new Date().toISOString();
         let item = await sp.web.lists.getByTitle(Libraryurl).items.getById(id_rapport).update({
           statut_rapport: "Livré",
           validateur_refId: userId,
