@@ -31,22 +31,6 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
 
   @override
   public async onInit(): Promise<void> {
-    //Log.info(LOG_SOURCE, 'Initialized ValiderRapportCommandSet');
-    /* test test */
-
-    const def = await sp.web.roleDefinitions.get();
-    
-    //console.log("def", def);
-    // Gets the associated members group of a web
-    /*const memberGroup = await sp.web.associatedMemberGroup();
-    console.log("memberGroup", memberGroup);*/
-    const groups = await sp.web.siteGroups.getByName("Aprés-Validation")();
-    //console.log("groups", groups);
-    const { Id: roleDefId } = await sp.web.roleDefinitions.getByName("Autorisation aprés validation rapport").get();
-    
-    //console.log("roleDefId", roleDefId);
-
-    /* test test */
     return Promise.resolve();
   }
 
@@ -89,6 +73,7 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
         confirmationDialog.id_rapport=id_rapport;
         confirmationDialog.FileRef=FileRef;
         confirmationDialog.statut="Validé";
+        confirmationDialog.title= 'Êtes vous sûr de vouloir valider ce rapport?';
         if(isValidateur)
           confirmationDialog.show();
         else
@@ -100,6 +85,7 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
         confirmationDialog.id_rapport=id_rapport;
         confirmationDialog.FileRef=FileRef;
         confirmationDialog.statut="Livré";
+        confirmationDialog.title= 'Êtes vous sûr que ce rapport est livré?';
         if(isLivreur)
           confirmationDialog.show();
         else
@@ -111,6 +97,7 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
         confirmationDialog.id_rapport=id_rapport;
         confirmationDialog.FileRef=FileRef;
         confirmationDialog.statut="Réclamation";
+        confirmationDialog.title= 'Êtes vous sûr de la réclamation de  ce rapport?';
         if(isLivreur)
           confirmationDialog.show();
         else
@@ -120,6 +107,4 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
         throw new Error('Unknown command');
     }
   }
-
-
 }

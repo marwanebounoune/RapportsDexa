@@ -8,6 +8,7 @@ import { getUser } from '../utils';
 
 export default class ConfirmationDialog extends BaseDialog {
     public message: string;
+    public title: string;
     public userEmail:string;
     public id_rapport:number;
     public FileRef:string;
@@ -17,6 +18,7 @@ export default class ConfirmationDialog extends BaseDialog {
     public render(): void {
         ReactDOM.render(<ConfirmationDialogContent
         close={ this.close }
+        title={ this.title }
         message={ this.message }
         submit={ this._submit }
         />, this.domElement);
@@ -52,15 +54,15 @@ export default class ConfirmationDialog extends BaseDialog {
         var userId = await (await getUser(userEmail)).data.Id;
         //var date = new Date().toLocaleString("en-US", {timeZone: "Africa/Casablanca"});
         var _date = new Date().toISOString();
-        console.log("_date", _date);
+        //console.log("_date", _date);
         let itemAvantValid = await sp.web.lists.getByTitle(Libraryurl).items.getById(id_rapport).get()
-        console.log("itemAvantValid => ", itemAvantValid)
+        //console.log("itemAvantValid => ", itemAvantValid)
         const folder = sp.web.getFolderByServerRelativePath(folderRacine);////"+FileLeafRef);
         const folderItem = await folder.getItem();
         if(itemAvantValid.statut_rapport === "Traité à valider"){
             await folderItem.breakRoleInheritance(false);
-        const { Id: roleDefId } = await sp.web.roleDefinitions.getByName("Gestion").get();
-        const { Id: roleDefI2 } = await sp.web.roleDefinitions.getByName("Collaboration").get();
+            const { Id: roleDefId } = await sp.web.roleDefinitions.getByName("Gestion").get();
+            const { Id: roleDefI2 } = await sp.web.roleDefinitions.getByName("Collaboration").get();
             const groups = await sp.web.siteGroups.getByName("Gestion")();
             const groups2 = await sp.web.siteGroups.getByName("Direction")();
             await folderItem.roleAssignments.add(groups.Id, roleDefId);
@@ -70,49 +72,23 @@ export default class ConfirmationDialog extends BaseDialog {
             const { Id: roleDefId3 } = await sp.web.roleDefinitions.getByName("Elaborateur_visiteur").get();
             const groups3 = await sp.web.siteGroups.getByName("Elaborateur_visiteur")();
             await folderItem.roleAssignments.remove(groups3.Id, roleDefId3);
-
         }
         let item = await sp.web.lists.getByTitle(Libraryurl).items.getById(id_rapport).update({
           statut_rapport: "Validé à livrer",
           validateur_refId: userId,
           date_x0020_de_x0020_validation: _date
         });
-        /*const folder = sp.web.getFolderByServerRelativePath(folderRacine);////"+FileLeafRef);
-        const folderItem = await folder.getItem();
-        await folderItem.breakRoleInheritance(false);
-        //const { Id: roleDefId } = await sp.web.roleDefinitions.getById(1073741928).get();
-        
-        const { Id: roleDefId } = await sp.web.roleDefinitions.getByName("Gestion").get();
-        //console.log("Gestion", roleDefId);
-        const { Id: roleDefI2 } = await sp.web.roleDefinitions.getByName("Collaboration").get();
-        //console.log("Direction", roleDefI2);
-
-        //id=5 for members
-        /*const groups = await sp.web.siteGroups.getByName("Gestion")();
-        const groups2 = await sp.web.siteGroups.getByName("Direction")();
-        await folderItem.roleAssignments.add(groups.Id, roleDefId);
-        await folderItem.roleAssignments.add(groups2.Id, roleDefI2);
-        /*const roles = await folderItem.roleAssignments.get();
-        console.log("folder roles", roles);
-    
-        const obj = await sp.web.firstUniqueAncestorSecurableObject.get();
-        console.log("firstUniqueAncestorSecurableObject", obj);
-        const perms2 = await sp.web.getCurrentUserEffectivePermissions();
-        console.log("getCurrentUserEffectivePermissions", perms2);
-        const groups = await sp.web.siteGroups();
-        console.log("groups", groups);
-        */
     }
 
     private async livrerRapport(Libraryurl:string, userEmail:string, id_rapport:number, folderRacine:string){
         var userId = await (await getUser(userEmail)).data.Id;
         var _date = new Date().toISOString();
         let item2 = await sp.web.lists.getByTitle(Libraryurl).items.getById(id_rapport).get()
-        console.log("item2 => ", item2)
+        //console.log("item2 => ", item2)
         let item = await sp.web.lists.getByTitle(Libraryurl).items.getById(id_rapport).update({
           statut_rapport: "Livré",
           validateur_refId: userId,
-          //date_x0020_de_x0020_validation: _date
+          Date_x0020_de_x0020_livraison: _date
         });
         const folder = sp.web.getFolderByServerRelativePath(folderRacine);////"+FileLeafRef);
         const folderItem = await folder.getItem();
@@ -126,11 +102,11 @@ export default class ConfirmationDialog extends BaseDialog {
         var userId = await (await getUser(userEmail)).data.Id;
         var _date = new Date().toISOString();
         let item2 = await sp.web.lists.getByTitle(Libraryurl).items.getById(id_rapport).get()
-        console.log("item2 => ", item2)
+        //console.log("item2 => ", item2);
         let item = await sp.web.lists.getByTitle(Libraryurl).items.getById(id_rapport).update({
           statut_rapport: "Réclamation",
           validateur_refId: userId,
-          //date_x0020_de_x0020_validation: _date
+          Date_x0020_de_x0020_reclamation: _date
         });
         const folder = sp.web.getFolderByServerRelativePath(folderRacine);////"+FileLeafRef);
         const folderItem = await folder.getItem();

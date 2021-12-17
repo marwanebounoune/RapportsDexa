@@ -8,7 +8,7 @@ export default class ConfirmationDialogContent extends React.Component<IConfirma
     public render(): JSX.Element {
         return <div>
             <DialogContent
-                title='Êtes vous sûr de vouloir valider ce rappart?'
+                title={this.props.title}
                 subText={this.props.message}
                 onDismiss={this.props.close}
                 showCloseButton={true}
