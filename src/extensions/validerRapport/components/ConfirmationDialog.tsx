@@ -52,7 +52,7 @@ export default class ConfirmationDialog extends BaseDialog {
     private async validerRapport(Libraryurl:string, userEmail:string, id_rapport:number, folderRacine:string){
         //console.log("userId", await getUser(userEmail));
         var userId = await (await getUser(userEmail)).data.Id;
-        const codeValidation = generateCodeValidation();
+        const codeValidation = generateCodeValidation().toString();
         //var date = new Date().toLocaleString("en-US", {timeZone: "Africa/Casablanca"});
         var _date = new Date().toISOString();
         //console.log("_date", _date);
@@ -78,7 +78,7 @@ export default class ConfirmationDialog extends BaseDialog {
           statut_rapport: "Validé à livrer",
           validateur_refId: userId,
           date_x0020_de_x0020_validation: _date,
-          //code: codeValidation
+          code_rapport: codeValidation
         });
     }
 
