@@ -5,6 +5,7 @@ import ConfirmationDialogContent from './ConfirmationDialogContent';
 import { sp } from "@pnp/sp/presets/all";
 import "@pnp/sp/folders";
 import { generateCodeValidation, getUser } from '../utils';
+import { Dialog } from '@microsoft/sp-dialog';
 
 export default class ConfirmationDialog extends BaseDialog {
     public message: string;
@@ -48,15 +49,22 @@ export default class ConfirmationDialog extends BaseDialog {
             let FileRef = rapport.getValueByName("FileRef");
             //console.log("id_rapport -> ", id_rapport);
             //console.log("FileRef -> ", FileRef);
-            if(this.statut=="Validé")
+            console.log("rapport -> ",rapport.getValueByName("statut_rapport"))
+            if(this.statut=="Validé" && (rapport.getValueByName("statut_rapport")==="Traité à valider" || rapport.getValueByName("statut_rapport")==="Réclamation" || rapport.getValueByName("statut_rapport")==="Validé à livrer (Traitement)"))
                 await this.validerRapport(this.Libraryurl,this.userEmail, id_rapport, FileRef);
-            else if(this.statut=="Livré"){
+            else if(this.statut=="Livré" && rapport.getValueByName("statut_rapport")==="Validé à livrer"){
                 await this.livrerRapport(this.Libraryurl,this.userEmail, id_rapport, FileRef);
             }
-            else if(this.statut=="Réclamation"){
+            else if(this.statut=="Réclamation" && rapport.getValueByName("statut_rapport")==="Livré"){
                 await this.reclamationRapport(this.Libraryurl,this.userEmail, id_rapport, FileRef);
             }
         }
+        if(this.statut=="Validé")
+            Dialog.alert(`Les rapports sont validés avec succès.`);
+        else if(this.statut=="Livré")
+            Dialog.alert(`Les rapports sont livrés avec succès.`);
+        else if(this.statut=="Réclamation")
+            Dialog.alert(`Les rapports sont en réclamation avec succès.`);
     }
 
     private async validerRapport(Libraryurl:string, userEmail:string, id_rapport:number, folderRacine:string){

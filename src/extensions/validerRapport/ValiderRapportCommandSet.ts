@@ -46,11 +46,11 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
     }
     
     if (compareOneCommand) {
-      compareOneTwo.visible = event.selectedRows.length !== 0 && (event.selectedRows[0].getValueByName("statut_rapport") === "Validé à livrer" && (Libraryurl === "Grands Projets 2022" || Libraryurl === "Rapports 2022"));
+      compareOneTwo.visible = event.selectedRows.length === 1 && (event.selectedRows[0].getValueByName("statut_rapport") === "Validé à livrer" && (Libraryurl === "Grands Projets 2022" || Libraryurl === "Rapports 2022"));
     }
     
     if (compareOneCommand) {
-      compareOneTree.visible = event.selectedRows.length !== 0 && (event.selectedRows[0].getValueByName("statut_rapport") === "Livré" && (Libraryurl === "Grands Projets 2022" || Libraryurl === "Rapports 2022"));
+      compareOneTree.visible = event.selectedRows.length === 1 && (event.selectedRows[0].getValueByName("statut_rapport") === "Livré" && (Libraryurl === "Grands Projets 2022" || Libraryurl === "Rapports 2022"));
     }
   }
 
