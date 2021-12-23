@@ -16,3 +16,10 @@ export  const generateCodeValidation = () => {
     const finale_code = code*76977;
     return finale_code;
 }
+export function isFalsy(variableValue:any){
+    if(typeof variableValue!='undefined' && variableValue){
+        //It will check undefined, null, 0 and "" also. 
+        return false;
+     }
+     return true;
+}

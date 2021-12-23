@@ -10,7 +10,7 @@ import { Dialog } from '@microsoft/sp-dialog';
 
 import ConfirmationDialog from './components/ConfirmationDialog';
 import "@pnp/sp/folders";
-import { getUser } from './utils';
+import { getUser, isFalsy } from './utils';
 import { sp } from "@pnp/sp/presets/all";
 import "@pnp/sp/folders";
 /**
@@ -51,10 +51,10 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
 
   @override
   public async onExecute(event: IListViewCommandSetExecuteEventParameters): Promise<void> {
-    let id_rapport:number = event.selectedRows[0].getValueByName("ID");
-    //console.log("rapport: ", event.selectedRows[0]);
-    let FileRef = event.selectedRows[0].getValueByName("FileRef");
-    
+    let rapport:any = event.selectedRows[0];
+    let id_rapport:number = rapport.getValueByName("ID");
+    console.log("rapport: ", rapport);
+    let FileRef = rapport.getValueByName("FileRef");
     userEmail = this.context.pageContext.user.email;
     var userId = await (await getUser(userEmail)).data.Id;
     
@@ -74,10 +74,20 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
         confirmationDialog.FileRef=FileRef;
         confirmationDialog.statut="Validé";
         confirmationDialog.title= 'Êtes vous sûr de vouloir valider ce rapport?';
-        if(isValidateur)
-          confirmationDialog.show();
-        else
+        if(isValidateur){
+          if( isFalsy(rapport.getValueByName("Titre_x0020_foncier"))
+            || isFalsy(rapport.getValueByName("Type_x0020_de_x0020_bien"))
+            || isFalsy(rapport.getValueByName("trait_x00e9__x0020_par"))
+            || isFalsy(rapport.getValueByName("Ville_x0020_client"))
+            || isFalsy(rapport.getValueByName("visiteur_ref"))
+            || isFalsy(rapport.getValueByName("Date_x0020_de_x0020_visite")) ){
+              Dialog.alert(`Veuillez remplir les informations du rapport.`);
+          }else{
+            confirmationDialog.show();
+          }
+        }else{
           Dialog.alert(`Vous n'êtes pas autorisé à effectuer cette action.`);
+        }
         break;
       case 'COMMAND_2':
         confirmationDialog.userEmail=userEmail;
