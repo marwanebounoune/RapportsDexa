@@ -14,6 +14,7 @@ export default class ConfirmationDialog extends BaseDialog {
     public FileRef:string;
     public Libraryurl:string;
     public statut:string;
+    public rapports:any;
 
     public render(): void {
         ReactDOM.render(<ConfirmationDialogContent
@@ -39,13 +40,22 @@ export default class ConfirmationDialog extends BaseDialog {
     
     private _submit = async () => {
         this.close();
-        if(this.statut=="Validé")
-            await this.validerRapport(this.Libraryurl,this.userEmail, this.id_rapport, this.FileRef);
-        else if(this.statut=="Livré"){
-            await this.livrerRapport(this.Libraryurl,this.userEmail, this.id_rapport, this.FileRef);
-        }
-        else if(this.statut=="Réclamation"){
-            await this.reclamationRapport(this.Libraryurl,this.userEmail, this.id_rapport, this.FileRef);
+        console.log("rapports 2 => ", this.rapports)
+        let rapportsLength = this.rapports.length
+        for(let i=0; i<rapportsLength; i++){
+            let rapport:any = this.rapports[i];
+            let id_rapport:number = rapport.getValueByName("ID");
+            let FileRef = rapport.getValueByName("FileRef");
+            //console.log("id_rapport -> ", id_rapport);
+            //console.log("FileRef -> ", FileRef);
+            if(this.statut=="Validé")
+                await this.validerRapport(this.Libraryurl,this.userEmail, id_rapport, FileRef);
+            else if(this.statut=="Livré"){
+                await this.livrerRapport(this.Libraryurl,this.userEmail, id_rapport, FileRef);
+            }
+            else if(this.statut=="Réclamation"){
+                await this.reclamationRapport(this.Libraryurl,this.userEmail, id_rapport, FileRef);
+            }
         }
     }
 
@@ -59,7 +69,7 @@ export default class ConfirmationDialog extends BaseDialog {
         let itemAvantValid = await sp.web.lists.getByTitle(Libraryurl).items.getById(id_rapport).get()
         //console.log("itemAvantValid => ", itemAvantValid)
         const groups = await sp.web.siteGroups();
-        console.log("Groups => ", groups)
+        //console.log("Groups => ", groups)
         const folder = sp.web.getFolderByServerRelativePath(folderRacine);////"+FileLeafRef);
         const folderItem = await folder.getItem();
         if(itemAvantValid.statut_rapport === "Traité à valider"){
@@ -70,6 +80,12 @@ export default class ConfirmationDialog extends BaseDialog {
             const groups2 = await sp.web.siteGroups.getByName("Direction")();
             await folderItem.roleAssignments.add(groups.Id, roleDefId);
             await folderItem.roleAssignments.add(groups2.Id, roleDefI2);
+            let item = await sp.web.lists.getByTitle(Libraryurl).items.getById(id_rapport).update({
+              statut_rapport: "Validé à livrer",
+              validateur_refId: userId,
+              date_x0020_de_x0020_validation: _date,
+              code_rapport: codeValidation
+            });
         }
         else{
             const { Id: roleDefId3 } = await sp.web.roleDefinitions.getByName("Elaborateur_visiteur").get();
@@ -81,13 +97,10 @@ export default class ConfirmationDialog extends BaseDialog {
             await folderItem.roleAssignments.remove(groups3.Id, roleDefId3);
             await folderItem.roleAssignments.remove(groups4.Id, roleDefId4);
             await folderItem.roleAssignments.add(groups5.Id, roleDefId5);
+            let item = await sp.web.lists.getByTitle(Libraryurl).items.getById(id_rapport).update({
+              statut_rapport: "Validé à livrer",
+            });
         }
-        let item = await sp.web.lists.getByTitle(Libraryurl).items.getById(id_rapport).update({
-          statut_rapport: "Validé à livrer",
-          validateur_refId: userId,
-          date_x0020_de_x0020_validation: _date,
-          code_rapport: codeValidation
-        });
     }
 
     private async livrerRapport(Libraryurl:string, userEmail:string, id_rapport:number, folderRacine:string){

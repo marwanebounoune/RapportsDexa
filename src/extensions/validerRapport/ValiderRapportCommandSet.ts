@@ -42,22 +42,24 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
     const compareOneTree: Command = this.tryGetCommand('COMMAND_3');
     Libraryurl = this.context.pageContext.list.title;
     if (compareOneCommand) {
-      // This command should be hidden unless exactly one row is selected.
-      compareOneCommand.visible = event.selectedRows.length === 1 && ((event.selectedRows[0].getValueByName("statut_rapport") === "Traité à valider" || event.selectedRows[0].getValueByName("statut_rapport") === "Réclamation") && (Libraryurl === "Grands Projets 2022" || Libraryurl === "Rapports 2022"));
-      compareOneTwo.visible = event.selectedRows.length === 1 && (event.selectedRows[0].getValueByName("statut_rapport") === "Validé à livrer" && (Libraryurl === "Grands Projets 2022" || Libraryurl === "Rapports 2022"));
-      compareOneTree.visible = event.selectedRows.length === 1 && (event.selectedRows[0].getValueByName("statut_rapport") === "Livré" && (Libraryurl === "Grands Projets 2022" || Libraryurl === "Rapports 2022"));
+      compareOneCommand.visible = event.selectedRows.length !== 0 && ((event.selectedRows[0].getValueByName("statut_rapport") === "Traité à valider" || event.selectedRows[0].getValueByName("statut_rapport") === "Validé à livrer (Traitement)" || event.selectedRows[0].getValueByName("statut_rapport") === "Réclamation") && (Libraryurl === "Grands Projets 2022" || Libraryurl === "Rapports 2022"));
+    }
+    
+    if (compareOneCommand) {
+      compareOneTwo.visible = event.selectedRows.length !== 0 && (event.selectedRows[0].getValueByName("statut_rapport") === "Validé à livrer" && (Libraryurl === "Grands Projets 2022" || Libraryurl === "Rapports 2022"));
+    }
+    
+    if (compareOneCommand) {
+      compareOneTree.visible = event.selectedRows.length !== 0 && (event.selectedRows[0].getValueByName("statut_rapport") === "Livré" && (Libraryurl === "Grands Projets 2022" || Libraryurl === "Rapports 2022"));
     }
   }
 
   @override
   public async onExecute(event: IListViewCommandSetExecuteEventParameters): Promise<void> {
     let rapport:any = event.selectedRows[0];
-    let id_rapport:number = rapport.getValueByName("ID");
-    console.log("rapport: ", rapport);
-    let FileRef = rapport.getValueByName("FileRef");
+    let rapports:any = event.selectedRows;
     userEmail = this.context.pageContext.user.email;
     var userId = await (await getUser(userEmail)).data.Id;
-    
     const validateur: any = await sp.web.lists.getByTitle("l_validateurs").items.getAll();
     var query = function(element) {
       return element.membre_refId === userId;
@@ -70,8 +72,7 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
       case 'COMMAND_1':
         confirmationDialog.userEmail=userEmail;
         confirmationDialog.Libraryurl=Libraryurl;
-        confirmationDialog.id_rapport=id_rapport;
-        confirmationDialog.FileRef=FileRef;
+        confirmationDialog.rapports= rapports;
         confirmationDialog.statut="Validé";
         confirmationDialog.title= 'Êtes vous sûr de vouloir valider ce rapport?';
         if(isValidateur){
@@ -92,8 +93,7 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
       case 'COMMAND_2':
         confirmationDialog.userEmail=userEmail;
         confirmationDialog.Libraryurl=Libraryurl;
-        confirmationDialog.id_rapport=id_rapport;
-        confirmationDialog.FileRef=FileRef;
+        confirmationDialog.rapports= rapports;
         confirmationDialog.statut="Livré";
         confirmationDialog.title= 'Êtes vous sûr que ce rapport est livré?';
         if(isLivreur)
@@ -104,8 +104,7 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
       case 'COMMAND_3':
         confirmationDialog.userEmail=userEmail;
         confirmationDialog.Libraryurl=Libraryurl;
-        confirmationDialog.id_rapport=id_rapport;
-        confirmationDialog.FileRef=FileRef;
+        confirmationDialog.rapports= rapports;
         confirmationDialog.statut="Réclamation";
         confirmationDialog.title= 'Êtes vous sûr de la réclamation de  ce rapport?';
         if(isLivreur)
