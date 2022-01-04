@@ -41,7 +41,7 @@ export default class ConfirmationDialog extends BaseDialog {
     
     private _submit = async () => {
         this.close();
-        console.log("rapports 2 => ", this.rapports)
+        //console.log("rapports 2 => ", this.rapports)
         let rapportsLength = this.rapports.length
         for(let i=0; i<rapportsLength; i++){
             let rapport:any = this.rapports[i];
@@ -49,10 +49,10 @@ export default class ConfirmationDialog extends BaseDialog {
             let FileRef = rapport.getValueByName("FileRef");
             //console.log("id_rapport -> ", id_rapport);
             //console.log("FileRef -> ", FileRef);
-            console.log("rapport -> ",rapport.getValueByName("statut_rapport"))
+            //console.log("rapport -> ",rapport.getValueByName("statut_rapport"))
             if(this.statut=="Validé" && (rapport.getValueByName("statut_rapport")==="Traité à valider" || rapport.getValueByName("statut_rapport")==="Réclamation" || rapport.getValueByName("statut_rapport")==="Validé à livrer (Traitement)"))
                 await this.validerRapport(this.Libraryurl,this.userEmail, id_rapport, FileRef);
-            else if(this.statut=="Livré" && rapport.getValueByName("statut_rapport")==="Validé à livrer"){
+            else if(this.statut=="Livré" && rapport.getValueByName("statut_rapport")==="Validé à livrer (Administration)"){
                 await this.livrerRapport(this.Libraryurl,this.userEmail, id_rapport, FileRef);
             }
             else if(this.statut=="Réclamation" && rapport.getValueByName("statut_rapport")==="Livré"){
@@ -89,7 +89,7 @@ export default class ConfirmationDialog extends BaseDialog {
             await folderItem.roleAssignments.add(groups.Id, roleDefId);
             await folderItem.roleAssignments.add(groups2.Id, roleDefI2);
             let item = await sp.web.lists.getByTitle(Libraryurl).items.getById(id_rapport).update({
-              statut_rapport: "Validé à livrer",
+              statut_rapport: "Validé à livrer (Administration)",
               validateur_refId: userId,
               date_x0020_de_x0020_validation: _date,
               code_rapport: codeValidation
@@ -106,7 +106,7 @@ export default class ConfirmationDialog extends BaseDialog {
             await folderItem.roleAssignments.remove(groups4.Id, roleDefId4);
             await folderItem.roleAssignments.add(groups5.Id, roleDefId5);
             let item = await sp.web.lists.getByTitle(Libraryurl).items.getById(id_rapport).update({
-              statut_rapport: "Validé à livrer",
+              statut_rapport: "Validé à livrer (Administration)",
             });
         }
     }
@@ -114,9 +114,9 @@ export default class ConfirmationDialog extends BaseDialog {
     private async livrerRapport(Libraryurl:string, userEmail:string, id_rapport:number, folderRacine:string){
         var userId = await (await getUser(userEmail)).data.Id;
         var _date = new Date().toISOString();
-        let item2 = await sp.web.lists.getByTitle(Libraryurl).items.getById(id_rapport).get()
+        //let item2 = await sp.web.lists.getByTitle(Libraryurl).items.getById(id_rapport).get()
         //console.log("item2 => ", item2)
-        let item = await sp.web.lists.getByTitle(Libraryurl).items.getById(id_rapport).update({
+        await sp.web.lists.getByTitle(Libraryurl).items.getById(id_rapport).update({
           statut_rapport: "Livré",
           validateur_refId: userId,
           Date_x0020_de_x0020_livraison: _date
