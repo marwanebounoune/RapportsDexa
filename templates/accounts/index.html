@@ -1,0 +1,272 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title >DEXA | Solution - Expertise immobilière</title>
+	<link rel="icon" type="image/png" href="https://dexa-maroc.com/wp-content/uploads/2017/02/favicon-dexa.png" sizes="16x16">
+	<!-- Global stylesheets -->
+	
+	
+	
+	<!-- Global stylesheets -->
+	<link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
+	<link href="{% static 'css/icons/icomoon/styles.css'%}" rel="stylesheet" type="text/css">
+	<link href="{% static 'css/bootstrap.css'%}" rel="stylesheet" type="text/css">
+	<link href="{% static 'css/core.css'%}" rel="stylesheet" type="text/css">
+	<link href="{% static 'css/components.css'%}" rel="stylesheet" type="text/css">
+	<link href="{% static 'css/colors.css'%}" rel="stylesheet" type="text/css">
+	
+   
+	<style>
+/* Slider */
+.slick-slide {
+    margin: 0px 20px;
+}
+
+.slick-slide img {
+    width: 100%;
+}
+
+.slick-slider
+{
+    position: relative;
+    display: block;
+    box-sizing: border-box;
+
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+
+    -webkit-touch-callout: none;
+    -khtml-user-select: none;
+    -ms-touch-action: pan-y;
+        touch-action: pan-y;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.slick-list
+{
+    position: relative;
+    display: block;
+    overflow: hidden;
+
+    margin: 0;
+    padding: 0;
+}
+.slick-list:focus
+{
+    outline: none;
+}
+.slick-list.dragging
+{
+    cursor: pointer;
+    cursor: hand;
+}
+
+.slick-slider .slick-track,
+.slick-slider .slick-list
+{
+    -webkit-transform: translate3d(0, 0, 0);
+       -moz-transform: translate3d(0, 0, 0);
+        -ms-transform: translate3d(0, 0, 0);
+         -o-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+}
+
+.slick-track
+{
+    position: relative;
+    top: 0;
+    left: 0;
+
+    display: block;
+}
+.slick-track:before,
+.slick-track:after
+{
+    display: table;
+
+    content: '';
+}
+.slick-track:after
+{
+    clear: both;
+}
+.slick-loading .slick-track
+{
+    visibility: hidden;
+}
+
+.slick-slide
+{
+    display: none;
+    float: left;
+
+    height: 100%;
+    min-height: 1px;
+}
+[dir='rtl'] .slick-slide
+{
+    float: right;
+}
+.slick-slide img
+{
+    display: block;
+}
+.slick-slide.slick-loading img
+{
+    display: none;
+}
+.slick-slide.dragging img
+{
+    pointer-events: none;
+}
+.slick-initialized .slick-slide
+{
+    display: block;
+}
+.slick-loading .slick-slide
+{
+    visibility: hidden;
+}
+.slick-vertical .slick-slide
+{
+    display: block;
+
+    height: auto;
+
+    border: 1px solid transparent;
+}
+.slick-arrow.slick-hidden {
+    display: none;
+}
+#connexion_content_center{
+	margin: 0 auto;
+	width: 1000px;
+}
+	</style>
+	
+	
+	<!-- /global stylesheets -->
+	
+	 
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script>
+ 
+
+
+</head>
+
+<body>
+	<!-- Main navbar -->	
+	<!-- /main navbar -->
+	<!-- Page container -->
+	<div class="page-container">
+		<!-- Page content -->
+		<div class="page-content">
+			<!-- Main content -->
+			<div class="content-wrapper">
+				<!-- Page header -->
+				<div class="page-header page-header-default">
+					<div class="page-header-content">
+						<div class="page-title">
+							<font size="+1"><span class="text-semibold">&nbsp;&nbsp;<font color="#2196F3">DEXA | </font>Solution -</color></span> Base de données des Rapports d'Expertise Immobilières</font><font size="-1"><sub><i> [by DEXA-MAROC]</i></sub>
+						</div>
+						<div class="heading-elements">
+							<div class="heading-btn-group">
+								<a class="btn btn-link btn-float has-text"><i class="icon-phone text-primary" style="font-size:20px;" ></i><span><b>+212 5 22 26 80 92, +212 6 61 77 43 48</b><br/></span></a>
+								<a class="btn btn-link btn-float has-text"><i class="icon-envelope text-primary" style="font-size:20px;"></i> <span><b>contact@dexa-maroc.com</b></span></a>
+								<!--<a href="#" class="btn btn-link btn-float has-text"><i class="icon-question3 text-primary" style="font-size:20px;"></i> <span><b>FAQ</b></span></a>-->
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /page header -->
+				<!-- Content area -->
+
+                <div class="py-5 text-center" >
+                    <div class="container">
+                      	<div class="row" >
+							<div class="mx-auto col-md-6 col-9" style="margin-top: 5%;margin-left: 25%;margin-right: 25%;">
+								<form  action="{% url 'login'%}" method="POST">
+									{% csrf_token %}
+									<div class="panel panel-body login-form">
+										<div class="text-center">
+											<h5 class="content-group-lg">Connectez vous à votre compte <small class="display-block">Saisissez vos identifiants</small></h5>
+										</div>
+										{% include 'partials/messages.html' %}
+										<div class="form-group has-feedback has-feedback-left ">
+											<input name="username" type="text" class="form-control col-10" placeholder="Username" required>
+											<div class="form-control-feedback">
+												<i class="icon-user text-muted"></i>
+											</div>
+										</div>
+										<div class="form-group has-feedback has-feedback-left">
+											<input name="password" type="password" class="form-control" placeholder="Password" required>
+											<div class="form-control-feedback">
+												<i class="icon-lock2 text-muted"></i>
+											</div>
+										</div>
+										<div class="form-group">
+											<button type="submit" class="btn bg-blue btn-block">Connexion <i class="icon-arrow-right14 position-right"></i></button>
+										</div>
+										<span class="help-block text-center no-margin">By continuing, you're confirming that you've read our <a href="#">Terms &amp; Conditions</a> and <a href="#">Cookie Policy</a></span>
+									</div>
+								</form>
+                    		</div>
+						</div>
+                    </div>
+					
+                </div>
+				
+					
+				<!-- /content area -->
+			</div>
+			
+				
+			<!-- /main content -->
+		</div>
+		<!-- /page content -->
+	</div>
+	<!-- Footer -->
+	<div>
+		{% include 'partials/footer.html' %}
+	</div>
+	<!-- /footer -->
+	<!-- /page container -->
+	<script type="text/javascript">
+		$(document).ready(function() {
+ 		  $('.customer-logos').slick({
+   			slidesToShow: 7,
+			dots: false,
+			prevArrow: false,
+			nextArrow: false,
+    		slidesToScroll: 1,
+			autoplay: true,
+			autoplaySpeed: 1000,
+			arrows: true,
+			dots: false,
+			pauseOnHover: true,
+			responsive: [{
+			breakpoint: 768,
+			settings: {
+				slidesToShow: 4
+			}
+			}, {
+			breakpoint: 520,
+			settings: {
+				slidesToShow: 3
+			}
+			}]
+		});
+		});
+    </script>
+</body>
+</html>

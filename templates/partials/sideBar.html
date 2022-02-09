@@ -1,0 +1,38 @@
+{%load static%}
+<!-- Main sidebar -->
+<div class="sidebar sidebar-main" id="sidebar" style="z-index:1010">
+	<div class="sidebar-content">
+		<!-- User menu -->
+		<div class="sidebar-user">
+			<div class="category-content">
+				<div class="media">
+					<a href="#" class="media-left" id="image-sideBar-a"><img {% if user.photoProfile %} src="{{user.photoProfile.url}}" {% else %} src="{% static 'images/placeholder.jpg'%}" {% endif %} class="img-circle img-sm" alt="image" id="image-sideBar" intrinsicsize="400x400"></a>
+					<div class="media-body">
+						<span class="media-heading text-semibold">{{user.last_name}} {{user.first_name}}</span>
+						<!--<div class="text-size-mini text-muted">
+							{{user.entreprise}}
+						</div>-->
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /user menu -->
+		<!-- Main navigation -->
+		<div class="sidebar-category sidebar-category-visible">
+			<div class="category-content no-padding">
+				<ul class="navigation navigation-main navigation-accordion">
+					<!-- Main -->
+					<li><a id = "Mymap-click"><i class="icon-location3"></i><span>My Map</span></a></li>
+					<li><a href="{% url 'connexion' %}"><i class="icon-cog5"></i> <span>Mes paramètres</span></a></li>
+					<li><a href="{% url 'GetRapport' %}"><i class="icon-history"></i> <span>Mes rapports</span></a></li>
+					<li><a href="#"><i class="icon-help"></i> <span>Aide/FAQ</span></a></li>
+					<li><a href="#"><i class="icon-info22"></i> <span>Support</span></a></li>
+					<li><a href="{% url 'logout' %}"><i class="icon-exit3"></i> <span>Déconnexion</span></a></li>
+					<!-- /main -->
+				</ul>
+			</div>
+		</div>
+		<!-- /main navigation -->
+	</div>
+</div>
+<!-- /main sidebar -->

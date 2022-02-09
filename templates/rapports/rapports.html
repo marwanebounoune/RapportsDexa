@@ -1,0 +1,258 @@
+{% extends "libraries.html" %} {%load static%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Limitless - Responsive Web Application Kit by Eugene Kopyov</title>
+    <style>
+        .custom-file-upload {
+            border: 1px solid #ccc;
+            display: inline-block;
+            padding: 6px 12px;
+            cursor: pointer;
+        }
+        
+        input[type="file"] {
+            display: none;
+        }
+    </style>
+    <!-- /theme JS files -->
+</head>
+{% block content %}
+
+<body>
+    <!-- Page container -->
+    <div class="page-container">
+        <!-- Page content -->
+        <div class="page-content">
+            <!-- /main sidebar -->
+            <!-- Main content -->
+            <div class="content-wrapper">
+
+                <!-- Model Form D'ajout facture AjouterFacture-->
+                <div class="modal fade" id="AjouterFacture" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&#215;</button>
+                                <h5 class="modal-title">Ajouter une fonctionnalité</h5>
+                            </div>
+                            <form action="{% url 'AjouterRapport' %}" method="POST" id="AjouterFacture-form">
+                                {% csrf_token %}
+                                <div class="modal-body">
+                                    <div id="message-facture" data-erreur='{{erreur}}'> {% include 'partials/messages.html' %} </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <label>Région disponibles</label>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="multi-select-full">
+                                                    <select class="multiselect-full-featured" multiple="multiple" name="regionChoisis" id="selected-GV">
+														<optgroup>
+														   <option value="1">Tanger-Tétouan-Al Hoceïma (1)</option>
+														   <option value="2">l'Oriental (2)</option>
+														   <option value="3">Fès-Meknès (3)</option>
+														   <option value="4">Rabat-Salé-Kénitra (4)</option>
+														   <option value="5">Béni Mellal-Khénifra (5)</option>
+														   <option value="6">Casablanca-Settats (6)</option>
+														   <option value="7">Marrakech-Safi (7)</option>
+														   <option value="8">Drâa-Tafilalet (8)</option>
+														   <option value="9">Souss-Massa (9)</option>
+														   <option value="10">Guelmim-Oued Noun (10)</option>
+														   <option value="11">Laâyoune-Sakia El Hamra (11)</option>
+														   <option value="12">Dakhla-Oued Ed Dahab (12)</option>
+														</optgroup>
+													</select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <label>Nombre des users</label>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <input type="number" min="0" placeholder="Nombre des users" class="form-control" name="nbrUser" value="0">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <label>Voulez vous renouvler votre pack de base?</label>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="radio-inline">
+                                                    <input type="radio" class="styled" name="renvPackDeBase" checked="checked" value="False" id="Non" />
+                                                    <label for="Non">Non</label>
+                                                </div>
+                                                <div class="radio-inline">
+                                                    <input type="radio" class="styled" name="renvPackDeBase" value="True" id="Oui" />
+                                                    <label for="Oui">Oui</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary" id="AjouterFacture-submit">Submit form</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Model Form D'ajout facture-->
+                <!-- Page header -->
+                <div class="page-header">
+                    <!-- Header content -->
+                    <div class="page-header-content">
+                        <div class="page-title">
+                            <h4><i class=" icon-history position-left"></i> <span class="text-semibold">Mon historique</span></h4>
+                            {% include 'partials/messages.html' %}
+                        </div>
+                    </div>
+                    <!-- /header content -->
+                </div>
+                <!-- /page header -->
+                <!-- Content area -->
+                <div class="content">
+                    <!-- User profile -->
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <!-- Profile info -->
+                            <div class="panel panel-flat" id="factures-table">
+                                <div class="panel-heading">
+                                    <h5 class="panel-title">Mes rapports</h5>
+                                    <div class="heading-elements">
+                                        <ul class="icons-list">
+                                            <li>
+                                                <a data-action="collapse"></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <table class="table table-striped media-library table-lg" id="ul-docs" >
+                                    <thead>
+                                        <tr>
+                                            <th>Affaire</th>
+                                            <th>Date</th>
+                                            <th>Titre(s) foncier(s)</th>
+                                            <th>Fichier pdf</th>
+                                            <!--<th>Actions</th>-->
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% if idUser %}
+										{% for rapport in data %}
+										<tr>
+                                            <td>{{rapport.affaire}}</td>
+                                            <td>{{rapport.date}}</td>
+                                            <td>{{rapport.tf}}</td>
+                                            <td><a href="{{rapport.fichier_pdf_genere}}">{{rapport.refernce}}</a></td>
+                                            <!--<td class="text-center">
+												<ul class="icons-list">
+													<li class="dropdown">
+														<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+															<i class="icon-menu9"></i>
+														</a>
+														<ul class="dropdown-menu dropdown-menu-right">
+															<li><a href="#"><i class="icon-file-pdf"></i> Afficher le rapport</a></li>
+														</ul>
+													</li>
+												</ul>
+											</td>-->
+                                        </tr>
+										{% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- /profile info -->
+                        </div>
+                        <div class="col-lg-3">
+                            <!-- User thumbnail -->
+                            <div class="thumbnail thumbnail-profil" id="photos-caption">
+                                <div id="message-Image" data-erreur='{{erreur}}'> {% include 'partials/messages.html' %} </div>
+                                <div class="thumb thumb-rounded thumb-slide rounded-circle thumb-profil">
+                                    <img {% if user.photoProfile %} src="{{user.photoProfile.url}}" {% else %} src="{% static 'images/placeholder.jpg'%}" {% endif %} alt="" id="imageUser">
+                                    <div class="caption">
+                                        <span id="caption-span">
+											<a {% if user.photoProfile %} href="{{user.photoProfile.url}}" {% else %} href="{% static 'images/placeholder.jpg'%}" {% endif %} class="btn bg-success-400 btn-icon btn-xs dispalyTemporaryImage" data-popup="lightbox" ><i class="icon-plus2"></i></a>
+											<a {% if user.photoProfile %} href="{{user.photoProfile.url}}" {% else %} href="{% static 'images/placeholder.jpg'%}" {% endif %} class="btn bg-success-400 btn-icon btn-xs dispalyTemporaryImage"><i class="icon-link"></i></a>
+										</span>
+                                    </div>
+                                </div>
+                                <div class="caption text-center">
+                                    <h6 class="text-semibold no-margin"> {{user.last_name}} {{user.first_name}} <small class="display-block">{% if user.entreprise %}{{user.entreprise}}{% endif %}</small></h6>
+                                </div>
+                            </div>
+                            <!-- /user thumbnail -->
+                        </div>
+                    </div>
+                    <!-- /user profile -->
+                </div>
+                <!-- /content area -->
+                <!-- Footer -->
+                <div>
+                    {% include 'partials/footer.html' %}
+                </div>
+                <!-- /footer -->
+            </div>
+            <!-- /main content -->
+        </div>
+    </div>
+    <!-- /page container -->
+</body>
+<blockquote>{{ user.content|escape }}</blockquote>
+<script>
+
+	
+	function getDocs(pin_id){
+		$("#ul-docs").hide();
+		var url = 'http://127.0.0.1:8000/rapports/'
+		fetch(url)
+		.then((resp) => resp.json())
+		.then(function(data){
+            console.log("Data ->", data)
+            $(".Docs_lenght").html(data.length);
+            $('#ul-docs').DataTable().clear().draw();
+            var typeFile = '';
+            var supprimerDocs = '';
+            if(data.length!=0){ 
+                $("#ul-docs").show();
+                if(data.length === 5 ){
+                    $("#ajouterDocs").hide();
+                }
+                for(var i=0;i<data.length;i++){
+                    typeFile = data[i].type_file;
+                    if(typeFile === 'C_L'){
+                        typeFile = 'Contrat de location';
+                    }
+                    if(typeFile === 'C_V'){
+                        typeFile = 'Contrat de vente';
+                    }
+                    if(data[i].pin.is_validate_by_user === false){
+                        supprimerDocs = "<li><a onclick='delete_piece_jointe_OnClick(" +data[i].id + ")'><i class='icon-bin'></i> Move to trash</a></li>";
+                    }
+                    filePath = data[i].fichier;
+                    filePathSplited =  filePath.split("/");
+                    fileName = filePathSplited[filePathSplited.length - 1]
+                    fichier = "<a href='"+data[i].fichier+"'>"+fileName+"</a>";
+                    actions ="<td class='text-center'><ul class='icons-list'><li class='dropdown'><a href='#' class='dropdown-toggle' data-toggle='dropdown'><i class='icon-menu9'></i>"+
+                        "</a><ul class='dropdown-menu dropdown-menu-right'><li><a onclick='show_pdf(" + data[i].id + ")'><i class=' icon-file-plus2'></i> Show</a></li>"+supprimerDocs+
+                        "</ul></li></ul></td>";
+                    DocsAddRow(typeFile, data[i].username.username, fichier, actions);
+                }
+		    }
+		});
+    }
+</script>
+{% endblock %}
+
+</html>

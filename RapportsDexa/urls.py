@@ -13,9 +13,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from Rapports.views import serve_protected_document
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('Accounts.urls')),
+    path('rapports', include('Rapports.urls')),
+    path('media/<path:relative_path>', serve_protected_document, name='document-download'),
 ]

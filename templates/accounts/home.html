@@ -1,0 +1,1135 @@
+{% extends "libraries.html" %}
+	{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Limitless - Responsive Web Application Kit by Eugene Kopyov</title>
+	<style>
+		.custom-file-upload {
+			border: 1px solid #ccc;
+			display: inline-block;
+			padding: 6px 12px;
+			cursor: pointer;
+		}
+		input[type="file"] {
+			display: none;
+		}
+	</style>
+
+	<!-- /theme JS files -->
+</head>
+{% block content %}
+<body>
+	<!-- Page container -->
+	<div class="page-container">
+		<!-- Page content -->
+		<div class="page-content">		
+			<!-- /main sidebar -->
+			<!-- Main content -->
+			<div class="content-wrapper">
+				<!-- Page header -->
+				<div class="page-header">
+					<!-- Header content -->
+					<div class="page-header-content">
+						<div class="page-title">
+							<h4><i class=" icon-user position-left"></i> <span class="text-semibold">Profil et paramètres utilisateur</span></h4>
+							<div id="message-my-map" data-erreur='{{erreur}}'> {% include 'partials/messages.html' %} </div>
+						</div>
+					</div>
+					<!-- /header content -->
+				</div>
+				<!-- /page header -->
+				<!-- Content area -->
+				<div class="content">
+					<!-- User profile -->
+					<div class="row">
+						<div class="col-lg-9">
+							<!-- Profile info -->
+							<div class="panel panel-flat" id="info-profil">
+								<div class="panel-heading">
+									<h6 class="panel-title">Informations de Profil</h6>
+									<div class="heading-elements">
+										<ul class="icons-list">
+											<li><a data-action="collapse"></a></li>
+										</ul>
+									</div>
+								</div>
+								<div class="panel-body">
+									<legend class="text-semibold"><i class="icon-reading position-left"></i>Informations personnelles</legend>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-md-4">
+												<label>Prénom : </label>
+												<b>{{user.first_name}} </b>
+											</div>
+											<div class="col-md-4">
+												<label>Nom : </label>
+												<b>{{user.last_name}}</b>
+											</div>			
+											<div class="col-md-4">
+												<label>Téléphone 1 : </label>
+												<b>{{user.tel1}}</b>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-md-4">
+												<label>Téléphone 2 : </label>
+												<b>{{user.tel2}}</b>
+											</div>					
+											<div class="col-md-4">
+												<label>Email : </label>
+												<b>{{user.email}}</b>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-md-8">
+												<label>Key Google Maps : </label>
+												<b>{% if user.key_map == Null or user.key_map == '' %}Vous n'avez pas une clé de google Maps</b>
+												<b>{% elif user.key_map != '' %}{{user.key_map}}{% endif %}</b>
+											</div>
+										</div>
+									</div>
+									<div class="text-right">
+										<ul><a href="#" class='btn btn-default btn-sm' data-toggle='modal' data-target='#modal_editInfoPerso'>Editer info<i class="icon-pen position-right"></i><span class="modal_editInfoPerso"></span></a></ul>
+									</div>
+									<!--<legend class="text-semibold"><i class="icon-reading position-left"></i> Informations Entreprise </legend>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-md-4">
+												<label>Entreprise : </label>
+												<b>{{user.entreprise}}</b>
+											</div>					
+											<div class="col-md-4">
+												<label>ICE:</label>
+												<b>{{user.ICE}}</b>
+											</div>
+											<div class="col-md-4">
+												<label>Domaine d'activité : </label>
+												<b>{% if user.domaineActivite == 'Autre' %}Autre{% endif %}</b>
+												<b>{% if user.domaineActivite == 'SG_AM' %}Société de gestion / Asset management {% endif %}</b>
+												<b>{% if user.domaineActivite == 'B_L' %}Banque / Leasing{% endif %}</b>
+												<b>{% if user.domaineActivite == 'P_D' %}Promoteur / Développeur{% endif %}</b>
+												<b>{% if user.domaineActivite == 'TI' %}Transaction en immobilier{% endif %}</b>
+												<b>{% if user.domaineActivite == 'C_EI' %}Conseil / Expertise en immobilier{% endif %}</b>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-md-4">
+												<label>Adresse :</label>
+												<b>{{user.adresse}}</b>
+											</div>
+										</div>
+									</div>
+									{% if user.userType == "principal"%}			
+										<div class="text-right">
+											<ul><a href="#" class='btn btn-default btn-sm' data-toggle='modal' data-target='#modal_editInfoEntreprise'>Editer info<i class="icon-pen position-right"></i><span class="modal_editInfoEntreprise"></span></a></ul>
+										</div>
+									{% endif %}		-->				
+								</div>
+							</div>
+							<!-- /profile info -->
+							<!-- new div for ajout sous user-->
+							{% if user.id == 1 %}
+							<div class="panel panel-flat" id="subUsers-table">
+								<div class="panel-heading">
+									<h5 class="panel-title">Gestion des utilisateurs</h5>
+									<div class="heading-elements">
+										<ul class="icons-list">
+											<li><a data-action="collapse"></a></li>
+										</ul>
+		                			</div>
+								</div>
+								<div class="panel-body">
+									{% if subUsers|length < nbrUsers or user.id == 1 %}<button type="button" class="btn btn-default btn-sm pull-right" data-toggle="modal" data-target="#AjouterSousUser" id="newSubUser"><i class="fa fa-plus"></i>&nbsp;Ajouter un sous User</button>{% endif %}
+								</div>
+								{% if subUsers %}
+								<table class="table datatable-basic">
+									<thead>
+										<tr>
+											<th>ID</th>
+											<th>username</th>
+											<th>nom complet</th>
+											<th>Type</th>
+											<th>Statut</th>
+											<th class="text-center">Actions</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% for subUser in subUsers %}
+										<tr>
+											<td>{{subUser.id}}</td>
+											<td>{{subUser.username}}</td>
+											<td>{{subUser.first_name}} {{subUser.last_name}}</td>
+											<td>simple user</td>
+											<td><a class="status" data-status="{% if subUser.is_active %}1{% else %}0{% endif %}" onclick="onClick_activer_desactiver(' {{subUser.id}} ', this)"><span class="label label-{% if subUser.is_active %}success{% else %}danger{% endif %}">{% if subUser.is_active %}Compte activé{% else %}Compte bloqué{% endif %}</span></a></td>
+											<td class="text-center">
+												<ul class="icons-list">
+													<li class="dropdown">
+														<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+															<i class="icon-menu9"></i>
+														</a>
+														<ul class="dropdown-menu dropdown-menu-right">
+															<li><a onclick="EditerSubUser('{{subUser.id}}')"><i class="icon-pencil7"></i> Editer</a></li>
+															<li><a data-status="{% if subUser.is_active %}1{% else %}0{% endif %}" onclick="onClick_activer_desactiver(' {{subUser.id}} ', this)"><i class="icon-reminder"></i> activation|desactivation </a></li>
+														</ul>
+													</li>
+												</ul>
+											</td>
+										</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+								{% endif %}
+							</div>
+							{% endif %}	
+							<!--/ new div for ajout sous user-->
+						</div>
+						<div class="col-lg-3">
+							<!-- User thumbnail -->
+							<div class="thumbnail thumbnail-profil" id="photos-caption">
+								<div id="message-Image" data-erreur='{{erreur}}'> {% include 'partials/messages.html' %} </div>
+								<div class="thumb thumb-rounded thumb-slide rounded-circle thumb-profil">
+									<img {% if user.photoProfile %} src="{{user.photoProfile.url}}" {% else %} src="{% static 'images/placeholder.jpg'%}" {% endif %} alt="" id="imageUser">
+									<div class="caption">
+										<span id="caption-span">
+											<a {% if user.photoProfile %} href="{{user.photoProfile.url}}" {% else %} href="{% static 'images/placeholder.jpg'%}" {% endif %} class="btn bg-success-400 btn-icon btn-xs dispalyTemporaryImage" data-popup="lightbox" ><i class="icon-plus2"></i></a>
+											<a {% if user.photoProfile %} href="{{user.photoProfile.url}}" {% else %} href="{% static 'images/placeholder.jpg'%}" {% endif %} class="btn bg-success-400 btn-icon btn-xs dispalyTemporaryImage"><i class="icon-link"></i></a>
+											<a class="btn bg-success-400 btn-icon btn-xs dispalyTemporaryImage" id="RemoveImageProfil"><i class="icon-trash"></i></a>
+										</span>
+									</div>
+								</div>
+						    	<div class="caption text-center">
+									<h6 class="text-semibold no-margin"> {{user.last_name}} {{user.first_name}} <small class="display-block">{% if user.entreprise %}{{user.entreprise}}{% endif %}</small></h6>
+									<form method='POST' action="{% url 'userChangerImage'%}" enctype="multipart/form-data" id="formUpload">
+										{% csrf_token %}
+										<ul class="icons-list mt-15" id="inputFileBlock">
+											<div class="uploader">
+												<input type="file" id="fileProfile" accept="image" name="ImageProfile" class="file-styled" >
+												<span class="action btn btn-default btn-sm" style="user-select: none;">
+													Changer photo de profil
+													<i class="icon-person position-right"></i>
+												</span>
+											</div>
+										</ul>
+										<ul class="icons-list mt-15" style="display: flex">
+											<button type="submit" class="btn btn-sm bg-primary" id="SubmitButton" style="display:none; width:100%"> 
+												Enregistrer les modifications
+											</button>
+										</ul>
+										<ul class="icons-list mt-15" style="display: flex">
+											<button type="button" class="btn btn-default btn-sm" id="CancelButton" style="display:none; width:100%">
+												Annuler
+											</button>
+										</ul>
+									</form>
+						    	</div>
+					    	</div>
+					    	<!-- /user thumbnail -->
+							<!-- Navigation -->
+							<div class="panel panel-flat">
+								<div class="panel-heading">
+									<h6 class="panel-title"><b>Type de la map</b></h6>
+								</div>
+								<div class="caption text-center">
+									<form method='POST' id="typeMaps" action="">
+										{% csrf_token %}
+										<div class="list-group-item list-group no-border no-padding-top" id="typeMap">
+											<select data-placeholder="Type de Map" class="select-size-lg " name="type_map" id="type_map">
+												<option></option>
+												<option value="Google" {% if user.type_map == 'Google' %}selected{% endif %}>Google Map</option>
+												<option value="Leaflet" {% if user.type_map == 'Leaflet' %}selected{% endif %}>Leafleat Map</option>
+											</select>
+											<br>
+											<div id="key" style="display: none;">
+												<label style="height:40px" >Key Google Maps</label>
+												<input type="text" placeholder="Your key" name="keyMap" class="form-control" style="height:40px" value="{{user.key_map}}"/>	
+											</div>
+											</div>
+										<ul class="icons-list mt-15" style="display: flex">
+											<button type="submit" class="btn btn-sm bg-primary form-control"  style="height:40px"> 
+												Enregistrer les modifacations
+											</button>
+										</ul>
+									</form>
+						    	</div>
+							</div>
+					    	<div class="panel panel-flat">
+								<div class="panel-heading">
+									<h6 class="panel-title"><b>Informations d'activité</b></h6>
+								</div>
+								<div class="list-group no-border no-padding-top">
+									<a class="list-group-item"><i class="icon-cash"></i>Crédit journalier restant <span class="badge bg-teal-400 pull-right">{{user.credit_journalier}}</span> </a>
+									<a class="list-group-item"><i class="icon-cash3"></i>Crédit mensuel restant<span class="badge bg-danger pull-right">{{user.credit_monsuel}}</span></a>		
+									<a href="" class="list-group-item"><i class="icon-history"></i>Mon historique d'activité</a>						
+								</div>
+							</div>
+							{% if user.id != 1 and user.lien != 1%}
+							<div class="panel panel-flat">
+								<div class="panel-heading">
+									<h6 class="panel-title"><b>Informations d'abonnement</b></h6>
+								</div>
+								<div class="list-group no-border no-padding-top" id="info-abonnement">
+									<a class="list-group-item"><i class="icon-ticket"></i>Type d'abonnement<span class="badge bg-teal-400 pull-right">{{type_abon}}</span> </a>
+									<a class="list-group-item"><i class="icon-cash3"></i>Régions Choisis <span class="badge bg-teal-400 pull-right">{{nbrGrandesVilles}}</span> </a>
+									{% if user.userType == "principal"%}	
+										<a class="list-group-item"><i class="icon-tree7"></i>Utilisateurs<span class="badge bg-danger pull-right">{{nbrUsers}}</span></a>
+									{% endif %}	
+								</div>
+							</div>
+							{% endif %}	
+							<!-- /navigation -->
+						</div>
+					</div>
+					<!-- /user profile -->
+					
+					<!-- Model Form D'ajout Sous User-->
+					<div class="modal fade" id="AjouterSousUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&#215;</button>
+								<h5 class="modal-title">Ajouter un sous Utilisateur</h5>
+								</div>
+								<form action="{% url 'AjouterSousUser' %}" method="POST" id="ajouterSousUser-form" autocomplete="off">
+									{% csrf_token %}
+									<div class="modal-body">
+										<div id="message" data-erreur='{{erreur}}'> {% include 'partials/messages.html' %} </div>
+										<div class="form-group">
+											<div class="row">
+												<div class="col-sm-6">
+													<label>First name</label>
+													<input type="text" placeholder="first name" class="form-control" name="firstName">
+												</div>
+												<div class="col-sm-6">
+													<label>Last name</label>
+													<input type="text" placeholder="last name" class="form-control" name="lastName">
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="row">
+												<div class="col-sm-6">
+													<label>UserName</label>
+													<input type="text" placeholder="username" class="form-control" name="userName" id="userName"/>
+												</div>
+												<div class="col-sm-6">
+													<label>Email</label>
+													<input type="email" placeholder="eugene@kopyov.com" class="form-control" name="email">
+													<span class="help-block">name@domain.com</span>
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="row">
+												<div class="col-sm-6">
+													<label>password</label>
+													<input type="password" placeholder="password" class="form-control" name="password" id="password" autocomplete = "new-password" required>
+												</div>
+												<div class="col-sm-6">
+													<label>Confirmation du password</label>
+													<input type="password" placeholder="Confirmation Password" class="form-control" name="ConfirmPassword" required>
+												</div>
+											</div>
+										</div>
+										<!--permession-->
+										<div class="content-group">
+											<p>Permission du user</p>
+											<p class="content-group-sm">
+												<select data-placeholder="Select permission" class="select-access-multiple-value select-access-multiple-clear" name="permission">
+													<option value="elaborateur" selected="selected">Elaborateur</option>
+													<option value="visiteur">Visiteur</option>
+													<option value="validateur">validateur</option>
+												</select>
+											</p>
+
+											<!--button type="button" class="btn btn-xs bg-blue change-to-view">Visualiser</button>
+											<button type="button" class="btn btn-xs bg-blue change-to-view-add">Ajouter</button>
+											<button type="button" class="btn btn-xs bg-blue change-to-edit">Editer</button>
+											<button type="button" class="btn btn-xs bg-blue change-to-delete">Supprimer</button-->
+											<div><button type="button" class="btn btn-info btn-rounded btn-xs access-multiple-clear pull-right">Clear selection</button></div>
+											<br/><br>
+										</div>
+										<!--/permession-->
+									<div class="modal-footer">
+										<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+										<button type="submit" class="btn btn-primary" id="ajouterSousUser-submit">Submit</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					<!-- /Model Form D'ajout Sous User-->
+					
+				</div>
+				<!-- /content area -->
+				<!--Editer les informations personnelles-->
+				<div class="modal fade" id="modal_editInfoPerso" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&#215;</button>
+								<h5 class="modal-title">Editer les informations personnelles</h5>
+							</div>
+							<form method="POST"  id="editInfoPerso-form" action="{% url 'updateUser' %}">
+								{% csrf_token %}
+								<div class="modal-body">
+									<div id="message-InfoPerso" data-erreur='{{erreur}}'> {% include 'partials/messages.html' %} </div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-md-4">
+												<label>Nom :</label>
+											</div>
+											<div class="col-md-8">
+												<input rows="5" cols="3" class="form-control" placeholder="Votre nom" name="last_name" value='{{user.last_name}}'>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-md-4">
+												<label>Prenom :</label>
+											</div>
+											<div class="col-md-8">
+												<input rows="5" cols="3" class="form-control" placeholder="Votre prenom" name="first_name" value='{{user.first_name}}'>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-md-4">
+												<label>Telephone 1 :</label>
+											</div>
+											<div class="col-md-8">
+												<input rows="5" cols="3" class="form-control" placeholder="Votre telephone 1" name="tel1" value='{{user.tel1}}'>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-md-4">
+												<label>Telephone 2 :</label>
+											</div>
+											<div class="col-md-8">
+												<input rows="5" cols="3" class="form-control" placeholder="Votre telephone 2" name="tel2" value='{{user.tel2}}'>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-md-4">
+												<label>E-mail :</label>
+											</div>
+											<div class="col-md-8">
+												<input rows="5" cols="3" class="form-control" placeholder="Votre email" name="email" value='{{user.email}}'>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-md-4">
+												<label>Key Google Maps :</label>
+											</div>
+											<div class="col-md-8">
+												<input rows="5" cols="3" class="form-control" placeholder="Votre key de Google" name="keyMap" value='{{user.key_map}}'>
+											</div>
+										</div>
+									</div>
+									<div class="form-group login-options">
+										<div class="row">
+										</div>
+									</div>
+									<div class="form-group">
+										<button type="submit" class="btn bg-blue btn-block" id="editInfoPerso-submit">Sauvegarder<i class="icon-arrow-right14 position-right"></i></button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<!--/Editer les informations personnelles-->
+				<!-- Editer les informations professionnelles -->
+				<div class="modal fade" id="modal_editInfoEntreprise" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&#215;</button>
+								<h5 class="modal-title">Editer les informations professionnelles</h5>
+							</div>
+							<form method="POST" action="{% url 'updateSte' %}" id="editInfoEntreprise-form" data-role="page">
+								{% csrf_token %}
+								<input type = "text"  name="user_id" value="{{ user.id }}" style="display:none">
+								<div class="modal-body">
+									<div id="message-updateSte" data-erreur='{{erreur}}'> {% include 'partials/messages.html' %} </div>
+						
+									
+									<div class="form-group">
+										<div class="row">
+											<div class="col-md-4">
+												<label>Entreprise :</label>
+											</div>
+											<div class="col-md-8">
+												<input rows="5" cols="3" class="form-control" placeholder="Votre entreprise" name="entreprise" value='{{user.entreprise}}'>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-md-4">
+												<label>ICE :</label>
+											</div>
+											<div class="col-md-8">
+												<input rows="5" cols="3" class="form-control" placeholder="Votre ICE" name="ICE" value='{{user.ICE}}'>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-md-4">
+												<label>Votre adresse :</label>
+											</div>
+											<div class="col-md-8">
+												<input rows="5" cols="3" class="form-control" placeholder="Votre adresse" name="adresse" value='{{user.adresse}}'>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-md-4">
+												<label>Votre domaine d'activité :</label>
+											</div>
+											<div class="col-md-8">
+												<select data-placeholder="Secteur d'activité" class="select-access-value form-control" name="domaine_activite" >
+													<option></option>
+													<option value="Autre" {% if user.domaineActivite == 'Autre' %}selected{% endif %}>Autre</option>
+													<option value="SG_AM" {% if user.domaineActivite == 'SG_AM' %}selected{% endif %}>Société de gestion / Asset management </option>
+													<option value="B_L" {% if user.domaineActivite == 'B_L' %}selected{% endif %}>Banque / Leasing</option>
+													<option value="P_D" {% if user.domaineActivite == 'P_D' %}selected{% endif %}>Promoteur / Développeur</option>
+													<option value="TI" {% if user.domaineActivite == 'TI' %}selected{% endif %}>Transaction en immobilier</option>
+													<option value="C_EI" {% if user.domaineActivite == 'C_EI' %}selected{% endif %}>Conseil / Expertise en immobilier</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<button type="submit" class="btn bg-blue btn-block" id="editInfoEntreprise-submit">Sauvegarder<i class="icon-arrow-right14 position-right"></i></button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<!--/Modal edition-->
+				<!--modal activation | desactivation-->
+				<div class="modal fade" id="activer_desactiver" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="bootbox-close-button close" data-dismiss="modal" aria-hidden="true">×</button>
+								<h4 class="modal-title">Accès User</h4>
+							</div>
+							<div class="modal-body">
+								<!--div class="bootbox-body">{% if subUser.is_active %} bloquer {% else %}activer{% endif %} l'accès de cet utilisateur</div-->
+								<div class="bootbox-body" id="Activation-msg" style="display:none">Activer l'accès de cet utilisateur</div>
+								<div class="bootbox-body" id="Desactivation-msg" style="display:none">Bloquer l'accès de cet utilisateur</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+								<button data-bb-handler="main" type="submit" class="btn btn-primary" id="confirm">Confirmer</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--/modal activation | desactivation-->
+				<!--modal activation | desactivation-->
+				<div class="modal fade" id="activer_desactiver" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"> 
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="bootbox-close-button close" data-dismiss="modal" aria-hidden="true">×</button>
+								<h4 class="modal-title">Accès User</h4>
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<div class="col-sm-6">
+										<label>Domaine D'activité</label>
+										<div class="multi-select-full">
+											<select class="multiselect-full-featured" multiple="multiple" name="domaineActivite">
+													<option value="Casablanca">Casablanca</option>
+													<option value="Rabat">Rabat</option>
+													<option value="Kenitra">Kenitra</option>
+											</select>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<label>Adresse</label>
+											<input type="text" placeholder="adresse user" class="form-control" name="adresse">
+									</div>
+								</div>
+							</div>
+							<h4 class="border-bottom text-muted no-padding">Permission</h4>
+							<!--permession-->
+							<div class="content-group">
+								<p>Permission du user</p>
+								<p class="content-group-sm">
+									<select data-placeholder="Select permission" class="select-access-multiple-value select-access-multiple-clear" name="permission">
+										<option value="elaborateur" selected="selected">Elaborateur</option>
+										<option value="visiteur">Visiteur</option>
+										<option value="validateur">validateur</option>
+									</select>
+								</p>
+								<div><button type="button" class="btn btn-info btn-rounded btn-xs access-multiple-clear pull-right">Clear selection</button></div>
+								<br/><br>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--/modal activation | desactivation-->	
+			</div>
+		<div>
+			{% include 'partials/footer.html' %}
+		</div>
+		<!-- /footer -->
+		<!-- editer profil sous user -->
+		<div class="modal fade" id="modal_profil_sous_user" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&#215;</button>
+						<h3 class="modal-title">Editer le sous user</h5>
+					</div>
+					<div class="modal-body">
+						<form method="POST" id="edit-subuser-form" enctype="multipart/form-data">
+							{% csrf_token %}			
+							<div id="message-update-subUser" data-erreur='{{erreur}}'> {% include 'partials/messages.html' %} </div>
+							<h4 class="border-bottom text-muted no-padding">Photos de profil</h4>
+							<div class="form-group">
+								<div class="row"> 
+									<div> 
+										<img src="" id="image-subUser" class="pull-left" alt=""style="margin-left:10px;width: 85px;height: 85px;border-radius: 6px;object-fit: cover">
+										<div id="img-section" class="col-sm-7" style="display: block;font-size: 12px"> <b>Profile Photo</b>
+											<p class="text-size-mini text-muted no-border no-padding">Accepted file type .png. Less than 2MB</p>
+											<div class="uploader">
+												<input type="file" id="fileProfile-SubUser" accept="image/*" name="ImageProfile-subUser" class="file-styled"/>
+												<span class="btn btn-default" style="user-select: none;">
+													Changer photo de profil
+												</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<h4 class="border-bottom text-muted no-padding">Info perso</h4>
+							<div class="form-group">
+								<div class="row">
+									<div class="col-sm-6">
+										<label>nom</label>
+											<input type="text" placeholder="nom user" class="form-control" name="nom" id="subuser-nom"/>
+									</div>
+									<div class="col-sm-6">
+										<label>prenom</label>
+											<input type="text" placeholder="prenom user" class="form-control" name="prenom" id="subuser-prenom">
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<div class="col-sm-6">
+										<label>telephone 01</label>
+										<input type="text" placeholder="telephone 01" class="form-control" name="tel1" id="subuser-tel1"/>
+									</div>
+									<div class="col-sm-6">
+										<label>telephone 02</label>
+										<input type="text" placeholder="telephone 02" class="form-control" name="tel2" id="subuser-tel2">
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<div class="col-sm-6">
+										<label>email</label>
+										<input type="email" placeholder="email user" class="form-control" name="email" id="subuser-email"/>
+									</div>
+								</div>
+							</div>
+							<h4 class="border-bottom text-muted no-padding">Info d'entreprise</h4>
+							<div class="form-group">
+								<div class="row">
+									<div class="col-sm-6">
+										<label>entreprise</label>
+										<input type="text" placeholder="nom entreprise" class="form-control" name="entreprise" id="subuser-entreprise" readonly/>
+									</div>
+									<div class="col-sm-6">
+										<label>ICE</label>
+										<input type="text" placeholder="ICE" class="form-control" name="ice" id="subuser-ice" readonly> 
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<div class="col-sm-6">
+										<label>Domaine D'activité</label>
+										<div class="multi-select-full">
+											<select data-placeholder="Secteur d'activité" class="select-access-value form-control" name="domaine_activite" id="subuser-domaine_activite">
+												<option></option>
+												<option value="Autre">Autre</option>
+												<option value="SG_AM">Société de gestion / Asset management </option>
+												<option value="B_L">Banque / Leasing</option>
+												<option value="P_D">Promoteur / Développeur</option>
+												<option value="TI">Transaction en immobilier</option>
+												<option value="C_EI">Conseil / Expertise en immobilier</option>
+											</select>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<label>Adresse</label>
+											<input type="text" placeholder="adresse user" class="form-control" name="adresse" id="subuser-adresse" readonly>
+									</div>
+								</div>
+							</div>
+							<h4 class="border-bottom text-muted no-padding">Permission</h4>
+							<!--permession-->
+							<div class="content-group">
+								<p>Permission du user</p>
+								<p class="content-group-sm">
+									<select data-placeholder="Select permission" class="select-access-multiple-value select-access-multiple-clear" name="permission" id="subuser-permission">
+										<option value="elaborateur" selected="selected">Elaborateur</option>
+										<option value="visiteur">Visiteur</option>
+										<option value="validateur">validateur</option>
+									</select>
+								</p>
+								<div><button type="button" class="btn btn-info btn-rounded btn-xs access-multiple-clear pull-right">Clear selection</button></div>
+								<br/><br>
+							</div>
+							<!--/permession-->			
+							<!--changer le password -->			
+							<h4 class="border-bottom text-muted no-padding">Changer le password du sous user</h4>
+							<div class="form-group">
+								<div class="row">
+									<div class="col-sm-6">
+										<label>password</label>
+										<input type="password" placeholder="nouveau password" class="form-control" name="pswd" id="subuser-pswd"/>
+									</div>
+									<div class="col-sm-6">
+										<label>confirmation du password</label>
+										<input type="password" placeholder="confirmer le password" class="form-control" name="confirmer-pswd" id="subuser-confirmer-pswd"> 
+									</div>
+								</div>
+							</div>			
+							<!-- /changer le password -->	
+							<br/><br/>
+							<div class="form-group">
+								<div class="row"> 
+									<div class="modal-footer">
+										<button type="submit" class="btn btn-primary" id="edit-subuser-submit" >Submit form</button>&nbsp;&nbsp;&nbsp;&nbsp;
+										<button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /editer profil sous user -->
+		<!-- /main content -->
+		</div>
+		<!-- suppression message-->
+		<div class="modal fade" id="myDeleteMessage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="bootbox-close-button close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h4 class="modal-title"></h4>
+				</div>
+				<div class="modal-body">
+					<div class="bootbox-body">Confirmer si vous etes sur de votre choix </div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+					<button data-bb-handler="main" type="button" class="btn btn-primary" id="confirm-supp">Confirmer</button>
+				</div>
+				</div>
+			</div>
+		</div>
+		<!-- / suppression message-->
+	</div>
+</body>
+<blockquote>{{ user.content|escape }}</blockquote>
+<script>
+	var OldImage=$('#imageUser').attr('src');
+	$("#type_map").change(function(){   
+		type_map = this.value;
+		if(type_map == 'Google'){
+		   $("#key").show();
+		}
+		else{
+		   $("#key").hide();
+		}
+	 });
+	 /*reset input of images*/
+	    function readURL(input) {
+         if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+               $('#imageUser').attr('src', e.target.result);
+               $('.dispalyTemporaryImage').attr('href', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+         }
+      }
+	 resetImageForm();
+	 function resetImageForm() {
+      $("#fileProfile").change(function(event){
+         if(this.files[0]!=undefined){
+			 if(this.files[0].size> 2000000){
+				 notification("la taille de l'image ne doit pas dépasser 2Mo");
+			 }
+			 else{
+				readURL(this);
+				$('#inputFileBlock').hide();
+				$('#SubmitButton').show();
+				$('#CancelButton').show();
+			 }
+         }
+      });
+
+	  $(document).on('click', '#CancelButton', function(event){
+         //$("#form").reset();
+         $("#formUpload")[0].reset();
+         $('#imageUser').attr('src', OldImage);
+         $('.dispalyTemporaryImage').attr('href', OldImage);
+         $('#inputFileBlock').show();
+         $('#SubmitButton').hide();
+         $('#CancelButton').hide();
+      });
+	  
+	  $(document).on('click', '#RemoveImageProfil', function(event){
+		  event.preventDefault();
+		  RemoveImageProfil();
+	  });
+	 }
+	 			/* subUser images*/
+		function readURLSubUser(input) {
+         if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+               $('#image-subUser').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+         }
+      }
+/***************************/
+	/* gerer les redirection par ajax*/
+	$("#ajouterSousUser-submit").off('click').on('click', function(event){
+	event.preventDefault();
+	var form = $("#ajouterSousUser-form")[0];
+	var dataForm = new FormData(form);
+	var token = $("meta[name='_csrf']").attr("content");
+
+	$.ajax({
+		type:'POST',
+		url: 'http://127.0.0.1:8000/AjouterSousUser',
+		headers: {"X-CSRF-TOKEN": token},
+		processData: false,
+		contentType: false,
+		cache: false,
+		data: dataForm,
+		success : function(result,status){
+			var $data = $("<data />").html(result);
+			var erreur = $data.find("#message").data();
+			if(erreur["erreur"] === 1){
+				$("#message").replaceWith($data.find("#message"));
+			}
+			else{
+				$("#subUsers-table").replaceWith($data.find("#subUsers-table"));
+				$("#AjouterSousUser").modal('toggle');
+				$("#message").hide();
+				notificationSuccess('Success message', "Le sous user a été ejouté avec succès" );
+			}
+			
+		}
+		});
+
+	});
+	/* reset form function*/
+	function resetForm(Idform){
+		form = $(Idform)[0]; 
+        $(Idform+' select').val('').change();
+        form.reset();
+	}
+
+	/* reset the modal AjouterSousUser*/
+         $("#AjouterSousUser").on('hidden.bs.modal', function () {
+			 resetForm("#ajouterSousUser-form");
+			 $("#message").hide();
+			 $('#ajouterSousUser-form select').val('view_pins').change();
+         });
+	/*activer ou desactiver un user*/
+	function onClick_activer_desactiver(subUserId, status){
+		var statusUser =  $(status).data('status');
+		message='';
+		if( statusUser === 1){
+			$("#Desactivation-msg").show();
+			$("#Activation-msg").hide();
+			message = 'le user a été bloqué avec succès';
+		}
+		else{
+			$("#Desactivation-msg").hide();
+			$("#Activation-msg").show();
+			message = 'le user a été activé avec succès';
+		}
+		$("#activer_desactiver").modal('toggle');
+		$('#confirm').off('click').on('click', function(event){
+            event.preventDefault();
+			var token = $("meta[name='_csrf']").attr("content");	
+			$.ajax({
+				type:'GET',
+				url: 'http://127.0.0.1:8000/activerDesactiverUser/'+subUserId,
+				headers: {"X-CSRF-TOKEN": token},
+				success : function(result,status){
+					var $data = $("<data />").html(result);
+					$("#subUsers-table").replaceWith($data.find("#subUsers-table"));
+					$("#activer_desactiver").modal('toggle');
+					notificationSuccess('Success message', message);
+					
+				}
+			});
+         });
+
+	}
+	/*getSubUserInfo*/
+	function getSubUserInfo(subUserId){
+		var token = $("meta[name='_csrf']").attr("content");
+		$("#subuser-pswd").val('');
+		$("#subuser-confirmer-pswd").val('');
+		$.ajax({
+				type:'GET',
+				url: 'http://127.0.0.1:8000/getSubUserInfo/'+subUserId,
+				headers: {"X-CSRF-TOKEN": token},
+				success : function(data,status){
+			 $('#subuser-nom').val(data.last_name);
+			 $('#subuser-prenom').val(data.first_name);
+			 $('#subuser-email').val(data.email);
+			 $('#subuser-entreprise').val(data.entreprise);
+			 $('#subuser-ice').val(data.ICE);
+			 $("#subuser-domaine_activite").val(data.domaineActivite).change();
+			 $("#subuser-domaine_activite").attr('disabled', 'disabled');
+			 
+			 $('#subuser-adresse').val(data.adresse);
+			 
+			 
+			 $('#subuser-tel1').val(data.tel1);
+			 
+			 $('#subuser-tel2').val(data.tel2);
+
+			 $("#subuser-permission").val(null).trigger("change");
+			 $("#subuser-permission").val(data.permission).trigger("change");
+
+			 images_profiles = "{% static 'images/placeholder.jpg' %}"
+			 if(data.photoProfile != null){
+				 images_profiles = data.photoProfile
+			 }
+			 $("#image-subUser").attr('src', images_profiles);
+
+			$("#fileProfile-SubUser").change(function(event){
+				var length = document.getElementById("fileProfile-SubUser").files.length;
+				
+
+				if(length != 0){
+					if(this.files[0].size> 2000000) {
+						notification("La taille de l'image ne doit pas dépasser 2Mo");
+					}
+					else{
+						readURLSubUser(this);
+					}
+					
+				}
+				else{
+					$("#image-subUser").attr('src', images_profiles);
+				}
+			});
+					
+				}
+			});
+	}
+
+	/*editer sub user*/
+	function EditerSubUser(subUserId){
+		$("#message-update-subUser").hide();
+		getSubUserInfo(subUserId);
+		$("#modal_profil_sous_user").modal('toggle');
+		$('#edit-subuser-submit').off('click').on('click', function(event){
+            event.preventDefault();
+			var form = $("#edit-subuser-form")[0];
+			var dataForm = new FormData(form);
+			
+			var token = $("meta[name='_csrf']").attr("content");	
+			$.ajax({
+				type:'POST',
+				url: 'http://127.0.0.1:8000/SubUserUpdate/'+subUserId,
+				headers: {"X-CSRF-TOKEN": token},
+				processData: false,
+				contentType: false,
+				cache: false,
+				data: dataForm,
+				success : function(result,status){
+					var $data = $("<data />").html(result);
+					var erreur = $data.find("#message-update-subUser").data();
+					if(erreur["erreur"] === 1){
+						$("#message-update-subUser").replaceWith($data.find("#message-update-subUser"));
+					}
+					else{
+						$("#subUsers-table").replaceWith($data.find("#subUsers-table"));
+						$("#modal_profil_sous_user").modal('toggle');
+						$("#message-update-subUser").hide();
+						notificationSuccess('Success message', "Votre modification a été effectuée avec succès" );
+					}
+				}
+			});
+         });
+	}
+	
+	/*controler le submit facture with ajax*/
+	$("#AjouterFacture-submit").off('click').on('click', function(event){
+	event.preventDefault();
+	var form = $("#AjouterFacture-form")[0];
+	var dataForm = new FormData(form);
+	var token = $("meta[name='_csrf']").attr("content");
+
+	$.ajax({
+		type:'POST',
+		url: 'http://127.0.0.1:8000/AjouterFacturation',
+		headers: {"X-CSRF-TOKEN": token},
+		processData: false,
+		contentType: false,
+		cache: false,
+		data: dataForm,
+		success : function(result,status){
+			var $data = $("<data />").html(result);
+			var erreur = $data.find("#message-facture").data();
+			if(erreur["erreur"] === 1){
+				$("#message-facture").replaceWith($data.find("#message-facture"));
+			}
+			else{
+				$("#factures-table").replaceWith($data.find("#factures-table"));
+				$("#info-abonnement").replaceWith($data.find("#info-abonnement"));
+				$("#AjouterFacture").modal('toggle');
+				$("#message-facture").hide();
+				notificationSuccess('Success message', "Merci, votre demande de fonctionnalité a été bien enregistrée et elle sera traitée dans les plus brefs délais" );
+			}
+			
+		}
+		});
+
+	});
+	
+	/* reset the modal AjouterSousUser*/
+	$("#AjouterFacture").on('hidden.bs.modal', function () {
+		resetForm("#AjouterFacture-form");
+		$("#message-facture").hide();
+		$("#selected-GV").val(null).trigger("change");
+		$('#selected-GV').val([]).multiselect('refresh')
+		alert($("#selected-GV").val())
+	});
+
+		/* controler le submit d'editer les InfoEntreprise with ajax */
+		editInfoEntreprise();
+		function editInfoEntreprise(){
+
+		$("#editInfoEntreprise-submit").off('click').on('click', function(event){
+			event.preventDefault();
+			var form = $("#editInfoEntreprise-form")[0];
+			var dataForm = new FormData(form);
+			var token = $("meta[name='_csrf']").attr("content");
+
+			$.ajax({
+				type:'POST',
+				url: 'http://127.0.0.1:8000/updateSte/',
+				headers: {"X-CSRF-TOKEN": token},
+				processData: false,
+				contentType: false,
+				cache: false,
+				data: dataForm,
+				success : function(result,status){
+					var $data = $("<data />").html(result);
+					var erreur = $data.find("#message-updateSte").data();
+					if(erreur["erreur"] === 1){
+						$("#message-updateSte").replaceWith($data.find("#message-updateSte"));
+					}
+					else{
+						$("#info-profil").replaceWith($data.find("#info-profil"));
+						$("#modal_editInfoEntreprise").modal('toggle');
+						notificationSuccess('Success message', 'Votre modification a été effectuée avec succès' );
+					}
+					
+				}
+			});
+	});
+
+		}
+		/* controler le submit d'editer les InfoPerso with ajax */
+		editInfoPersoSubmit();
+		function editInfoPersoSubmit(){
+		$("#editInfoPerso-submit").off('click').on('click', function(event){
+			event.preventDefault();
+			var form = $("#editInfoPerso-form")[0];
+			var dataForm = new FormData(form);
+			var token = $("meta[name='_csrf']").attr("content");
+
+			$.ajax({
+				type:'POST',
+				url: 'http://127.0.0.1:8000/updateUser/',
+				headers: {"X-CSRF-TOKEN": token},
+				processData: false,
+				contentType: false,
+				cache: false,
+				data: dataForm,
+				success : function(result,status){
+					var $data = $("<data />").html(result);
+					var erreur = $data.find("#message-InfoPerso").data();
+					if(erreur["erreur"] === 1){
+						$("#message-InfoPerso").replaceWith($data.find("#message-InfoPerso"));
+					}
+					else{
+						$("#info-profil").replaceWith($data.find("#info-profil"));
+						$("#modal_editInfoPerso").modal('toggle');
+						notificationSuccess('Success message', 'Votre modification a été effectuée avec succès' );
+					}
+					
+				}
+			});
+	});
+
+		}
+		/* reset the modal editInfoPerso*/
+		$("#modal_editInfoPerso").on('hidden.bs.modal', function (event) {
+			var variable = null;
+			$("#editInfoPerso-form").load(location.href + " #editInfoPerso-form", function(result) {
+    		 variable = $('#editInfoPerso-form').html();
+			var $data = $("<data />").html(variable);
+			$("#editInfoPerso-form").replaceWith($data.find("#editInfoPerso-form"));
+			editInfoPersoSubmit();
+		});
+		});
+			/* reset the modal editInfoEntreprise*/
+		$("#modal_editInfoEntreprise").on('hidden.bs.modal', function (event) {
+			var variable = null;
+			$("#editInfoEntreprise-form").load(window.location.href + " #editInfoEntreprise-form", function(result) {
+    		 variable = $('#editInfoEntreprise-form').html();
+			var $data = $("<data />").html(variable);
+			$("#editInfoEntreprise-form").replaceWith($data.find("#editInfoEntreprise-form"));
+			editInfoEntreprise();
+});
+		});
+</script>
+{% endblock  %}
+</html>

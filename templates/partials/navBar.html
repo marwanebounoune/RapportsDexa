@@ -1,0 +1,37 @@
+{%load static%}
+<!-- Main navbar -->
+<div class="navbar navbar-inverse" id="navbar">
+   <div class="navbar-header">
+      <a class="navbar-brand" href="{% url 'connexion' %}"><!--img src="{% static 'images/logo_light.png'%}" alt="dexa-logo"/--> DEXA Solution </a>
+      <ul class="nav navbar-nav visible-xs-block">
+         <li><a data-toggle="collapse" data-target="#navbar-mobile"><i class="icon-tree5"></i></a></li>
+         <li><a class="sidebar-mobile-main-toggle"><i class="icon-paragraph-justify3"></i></a></li>
+         <li><a class="sidebar-mobile-detached-toggle"><i class="icon-grid7"></i></a></li>
+      </ul>
+   </div>
+   <div class="navbar-collapse collapse" id="navbar-mobile">
+      <ul class="nav navbar-nav">
+         <li>
+            <a class="sidebar-control sidebar-main-toggle hidden-xs">
+            <i class="icon-paragraph-justify3"></i>
+            </a>
+         </li>
+      </ul>
+      <div class="navbar-right">
+         <ul class="nav navbar-nav">
+            <li class="dropdown dropdown-user">
+               <a class="dropdown-toggle" data-toggle="dropdown" id="image-navBar-a">
+               <img intrinsicsize="400x400" {% if user.photoProfile %} src="{{user.photoProfile.url}}" {% else %} src="{% static 'images/placeholder.jpg'%}" {% endif %} alt="image" id="image-navBar"/>
+               <span>{{user.last_name}} {{user.first_name}}</span>
+               <i class="caret"></i>
+               </a>
+               <ul class="dropdown-menu dropdown-menu-right">
+                  <li><a href="{% url 'connexion' %}"><i class="icon-cog5"></i>Mes paremètres</a></li>
+                  <li><a href="{% url 'logout' %}"><i class="icon-switch2"></i>Se déconnecter</a></li>
+               </ul>
+            </li>
+         </ul>
+      </div>
+   </div>
+</div>
+<!-- /main navbar -->
