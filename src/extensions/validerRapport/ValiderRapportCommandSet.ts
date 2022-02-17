@@ -10,7 +10,7 @@ import { Dialog } from '@microsoft/sp-dialog';
 
 import ConfirmationDialog from './components/ConfirmationDialog';
 import "@pnp/sp/folders";
-import { getUser, isFalsy } from './utils';
+import { generateCodeValidation, getUser, isFalsy } from './utils';
 import { sp } from "@pnp/sp/presets/all";
 import "@pnp/sp/folders";
 /**
@@ -61,6 +61,10 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
     userEmail = this.context.pageContext.user.email;
     var userId = await (await getUser(userEmail)).data.Id;
     const validateur: any = await sp.web.lists.getByTitle("l_validateurs").items.getAll();
+    //const Conventions: any = await sp.web.lists.getByTitle("Rapports 2022").items.getAll();
+    //console.log("Conventions -> ", Conventions)
+    //const codeValidation = generateCodeValidation();
+    //console.log("finale_code:  ", codeValidation)
     var query = function(element) {
       return element.membre_refId === userId;
     };

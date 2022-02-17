@@ -8,13 +8,14 @@ export async function getUser(email: string) {
 }
 export  const generateCodeValidation = () => {
     const date = new Date();                    //yymmddhhmm
-    let code: any = 22*Math.pow(10, 8);         //22=2022
-    code += (date.getMonth()+1)*Math.pow(10, 6);//mois*10^6
-    code += date.getDate()*Math.pow(10, 4);     //jour*10^4
-    code += date.getHours()*Math.pow(10, 2);
-    code += date.getMinutes();
-    const finale_code = code*76977;
-    return finale_code;
+    let code: any = 22*Math.pow(10, 12);         //22=2022
+    code += (date.getMonth()+1)*Math.pow(10, 10);//mois*10^6
+    code += date.getDate()*Math.pow(10, 6);     //jour*10^4
+    code += date.getHours()*Math.pow(10, 4);
+    code += date.getMinutes()*Math.pow(10, 2);
+    code += date.getSeconds();
+    const finale_code = code*368689;
+    return finale_code.toString(32);
 }
 export function isFalsy(variableValue:any){
     if(typeof variableValue!='undefined' && variableValue){
