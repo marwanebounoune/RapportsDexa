@@ -4,7 +4,7 @@
     "https": true,
     "serveConfigurations": {
         "default": {
-            "pageUrl": "https://agroupma.sharepoint.com/sites/DEXA2022/Rapports%202022/Forms/AllItems.aspx",
+            "pageUrl": "https://agroupma.sharepoint.com/sites/DEXA2022/Grands%20Projets%202022/Forms/AllItems.aspx",
             "customActions": {
                 "43dafcd2-e786-48b3-93be-34ad27895658": {
                     "location": "ClientSideExtension.ListViewCommandSet",
@@ -16,7 +16,7 @@
             }
         },
         "validerRapport": {
-            "pageUrl": "https://agroupma.sharepoint.com/sites/DEXA2022/Rapports%202022/Forms/AllItems.aspx",
+            "pageUrl": "https://agroupma.sharepoint.com/sites/DEXA2022/Grands%20Projets%202022/Forms/AllItems.aspx",
             "customActions": {
                 "43dafcd2-e786-48b3-93be-34ad27895658": {
                     "location": "ClientSideExtension.ListViewCommandSet",

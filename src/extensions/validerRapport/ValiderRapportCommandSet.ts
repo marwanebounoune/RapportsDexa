@@ -41,6 +41,7 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
     const compareOneTwo: Command = this.tryGetCommand('COMMAND_2');
     const compareOneTree: Command = this.tryGetCommand('COMMAND_3');
     Libraryurl = this.context.pageContext.list.title;
+    console.log("Libraryurl", Libraryurl)
     if (compareOneCommand) {
       compareOneCommand.visible = event.selectedRows.length !== 0 && ((event.selectedRows[0].getValueByName("statut_rapport") === "Traité à valider" || event.selectedRows[0].getValueByName("statut_rapport") === "Validé à livrer (Traitement)" || event.selectedRows[0].getValueByName("statut_rapport") === "Réclamation") && (Libraryurl === "Grands Projets 2022" || Libraryurl === "Rapports 2022"));
     }
@@ -80,12 +81,13 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
         confirmationDialog.statut="Validé";
         confirmationDialog.title= 'Êtes vous sûr de vouloir valider ce rapport?';
         if(isValidateur){
-          if( isFalsy(rapport.getValueByName("Titre_x0020_foncier"))
+          if( (isFalsy(rapport.getValueByName("Titre_x0020_foncier"))
             || isFalsy(rapport.getValueByName("Type_x0020_de_x0020_bien"))
             || isFalsy(rapport.getValueByName("trait_x00e9__x0020_par"))
             || isFalsy(rapport.getValueByName("Ville_x0020_client"))
             || isFalsy(rapport.getValueByName("visiteur_ref"))
-            || isFalsy(rapport.getValueByName("Date_x0020_de_x0020_visite")) ){
+            || isFalsy(rapport.getValueByName("Date_x0020_de_x0020_visite"))) 
+            && Libraryurl!= "Grands Projets 2022"){
               Dialog.alert(`Veuillez remplir les informations du rapport.`);
           }else{
             confirmationDialog.show();
