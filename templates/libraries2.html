@@ -1,0 +1,1019 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title >DEXA | Solution - Expertise immobilière</title>
+      <!-- Global stylesheets -->
+      <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
+      <link href="{% static 'css/icons/icomoon/styles.css'%}" rel="stylesheet" type="text/css">
+      <link href="{% static 'css/bootstrap.css'%}" rel="stylesheet" type="text/css">
+      <link href="{% static 'css/core.css'%}" rel="stylesheet" type="text/css">
+      <link href="{% static 'css/components.css'%}" rel="stylesheet" type="text/css">
+      <link href="{% static 'css/colors.css'%}" rel="stylesheet" type="text/css">
+      <link href="{% static 'css/icons/fontawesome/styles.min.css'%}" rel="stylesheet" type="text/css">
+      <link rel="icon" type="image/png" href="https://dexa-maroc.com/wp-content/uploads/2017/02/favicon-dexa.png" sizes="16x16">
+      <!-- Leaflet integration css links-->
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+      <link rel="stylesheet" type="text/css" href="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.css">
+      <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.3.0/dist/MarkerCluster.Default.css" />
+      <!-- /global stylesheets -->
+      <!-- Core JS files -->
+      <script type="text/javascript" src="{% static 'js/plugins/loaders/pace.min.js'%}"></script>
+      <script type="text/javascript" src="{% static 'js/core/libraries/jquery.min.js'%}"></script>
+      <script type="text/javascript" src="{% static 'js/core/libraries/bootstrap.min.js'%}"></script>
+      <script type="text/javascript" src="{% static 'js/plugins/loaders/blockui.min.js'%}"></script>
+      <script type="text/javascript" src="{% static 'js/plugins/loaders/progressbar.min.js' %}"></script>
+      <script type="text/javascript" src="{% static 'js/pages/components_loaders.js' %}"></script>
+      <!-- /core JS files -->
+      <!-- Theme JS files-->
+      <script type="text/javascript" src="{% static 'js/core/libraries/jquery_ui/interactions.min.js'%}"></script>
+      <script type="text/javascript" src="{% static 'js/plugins/forms/selects/select2.min.js'%}"></script>
+      <script type="text/javascript" src="{% static 'js/core/app.js'%}"></script>
+      <script type="text/javascript" src="{% static 'js/pages/form_select2.js'%}"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.full.js" defer></script>
+      <script type="text/javascript" src="{% static 'js/plugins/forms/styling/uniform.min.js'%}"></script>
+      <script type="text/javascript" src="{% static 'js/plugins/notifications/pnotify.min.js'%}"></script>
+      <script type="text/javascript" src="{% static 'js/plugins/forms/selects/bootstrap_multiselect.js'%}"></script>
+      <script type="text/javascript" src="{% static 'js/pages/form_multiselect.js'%}"></script>
+      <!-- /theme JS files -->
+      <script type="text/javascript" src="{% static 'js/pages/sidebar_dual.js'%}"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+      <script type="text/javascript" src="{% static 'js/plugins/forms/inputs/autosize.min.js'%}"></script>
+      <script type="text/javascript" src="{% static 'js/plugins/forms/inputs/formatter.min.js'%}"></script>
+      <script type="text/javascript" src="{% static 'js/plugins/forms/inputs/typeahead/typeahead.bundle.min.js'%}"></script>
+      <script type="text/javascript" src="{% static 'js/plugins/forms/inputs/typeahead/handlebars.min.js'%}"></script>
+      <script type="text/javascript" src="{% static 'js/plugins/forms/inputs/passy.js'%}"></script>
+      <script type="text/javascript" src="{% static 'js/plugins/forms/inputs/maxlength.min.js'%}"></script>
+      <script type="text/javascript" src="{% static 'js/pages/form_controls_extended.js'%}"></script> 
+      
+      <script type="text/javascript" src="{% static 'js/plugins/media/fancybox.min.js'%}"></script>
+      <script type="text/javascript" src="{% static 'js/pages/gallery.js'%}"></script>
+      <!-- /global stylesheets -->
+      <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+      <!-- Esri Leaflet from CDN -->
+      <script src="https://unpkg.com/esri-leaflet@2.4.1/dist/esri-leaflet.js" integrity="sha512-xY2smLIHKirD03vHKDJ2u4pqeHA7OQZZ27EjtqmuhDguxiUvdsOuXMwkg16PQrm9cgTmXtoxA6kwr8KBy3cdcw==" crossorigin=""></script>
+      <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"></script>
+      <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.js"></script>
+      <!-- markercluster Leaflet from CDN -->
+      <script src="https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.4.1/dist/leaflet.markercluster-src.min.js"></script>
+      <!-- pnotify -->
+      <!--script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.0.0/pnotify.min.js"></script-->
+         <script type="text/javascript" src="{% static 'js/pages/components_notifications_pnotify.js'%}"></script>
+         <!-- tag JS files -->
+      <script type="text/javascript" src="{% static 'js/plugins/forms/tags/tagsinput.min.js'%}"></script>
+      <script type="text/javascript" src="{% static 'js/plugins/forms/tags/tokenfield.min.js'%}"></script>
+      <script type="text/javascript" src="{% static 'js/plugins/ui/prism.min.js'%}"></script>
+      <script type="text/javascript" src="{% static 'js/pages/form_tags_input.js'%}"></script>
+      <!-- /tag JS files -->
+   <!-- drag and drop zone-->
+      <script type="text/javascript" src="{% static 'js/plugins/uploaders/dropzone.min.js'%}"></script>
+      <script type="text/javascript" src="{% static 'js/pages/uploader_dropzone.js'%}"></script>
+   <!---->
+   <!-- tables-->
+   <script type="text/javascript" src="{% static 'js/plugins/tables/datatables/datatables.min.js'%}"></script>
+   <script type="text/javascript" src="{% static 'js/pages/datatables_advanced.js'%}"></script>
+   <!-- /tables-->
+      <!--switchery-->
+   <script type="text/javascript" src="{% static 'js/plugins/forms/styling/switchery.min.js' %}"></script>
+   <script type="text/javascript" src="{% static 'js/plugins/forms/styling/switch.min.js' %}"></script>
+
+   <!-- leafleat fullscreen-->
+   <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
+   <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css' rel='stylesheet' />
+
+   </head>
+   <style>
+      #map{
+         margin: auto;
+         height: 500px;
+         width:100%;
+      }
+      .controls {
+         margin-top: 16px;
+         border: 1px solid transparent;
+         border-radius: 2px 0 0 2px;
+         box-sizing: border-box;
+         -moz-box-sizing: border-box;
+         height: 32px;
+         outline: none;
+         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      }
+      #pac-input {
+         background-color: #fff;
+         font-family: Roboto;
+         font-size: 15px;
+         font-weight: 300;
+         margin-left: 12px;
+         padding: 0 11px 0 13px;
+         text-overflow: ellipsis;
+         width: 400px;
+      }
+      #pac-input:focus {
+         border-color: #4d90fe;
+      }
+      textarea {
+         padding: 10px;
+         line-height: 1.5;
+         border-radius: 5px;
+         border: 1px solid #ccc;
+         box-shadow: 1px 1px 1px #999;
+      }
+      #map_focus{
+      height:200px;
+      width:100%;
+      }
+      #mapDynamique{
+         height:300px;
+         width:100%;
+      }
+      .pnotify-center {
+         right: calc(50% - 150px) !important;
+      }
+      .listPopUp li a{
+         color:black;
+         font-size: 14px;
+      }
+      .listPopUp li a:hover{
+         color:black;
+         font-size: 14px;
+         background: #ced4da;
+      }
+      .thumb-photos, .thumbnail-photos, .photos{
+         width: 220px;
+         height: 220px;
+         overflow: hidden;
+      }
+      .TagPhotographies {right: 0px; 
+         bottom: 0px; 
+         z-index: 1000; 
+         text-align: right;position: absolute;
+      }
+      .image-thumbnail{
+         width: 100%;
+         height: 100%;
+         object-fit: cover;
+      }
+      .thumbnail-profil{
+         width: 100%;
+         height: 100%;
+         overflow: hidden;
+      }
+      .thumb-profil, #imageUser{
+         width: 200px;
+         height: 200px;
+         object-fit: cover;
+      }
+      td, th { 
+         text-align: center
+      }
+      #actualisation {
+         font-family: Arial, Helvetica, sans-serif;
+         border-collapse: collapse;
+         width: 100%;
+      }
+      #actualisation td, #actualisation th {
+         border: 1px solid #ddd;
+         padding: 5px;
+      }
+      #actualisation tr:nth-child(even){
+         background-color: #f2f2f2;
+      }
+      #actualisation tr:hover {
+         background-color: #ddd;
+      }
+      #actualisation th {
+         padding-top: 5px;
+         padding-bottom: 5px;
+         background-color: #95B9C7;
+         color: black;
+      }
+      .leaflet-marker-label{
+         position: absolute;
+         top:-23px;
+         padding: 5px 0;
+         display: flex;
+         flex-direction: column;
+         text-align: center;
+         width: 25px;
+         height: 41px;
+         background-size: 25px 41px;
+         background-repeat: no-repeat;
+         color: #000000;
+         font-size: 9px;
+         font-weight: 80000;
+      }
+      .leaflet-marker-label-etoile{
+         position: absolute;
+         top:-23px;
+         padding: 14px 0;
+         display: flex;
+         flex-direction: column;
+         text-align: center;
+         background-size: 35px 41px;
+         background-repeat: no-repeat;
+         color: #000000;
+         font-size: 9px;
+         font-weight: 80000;
+         width: 35px;
+         height: 41px;
+      }
+      .leaflet-marker-red{
+         background-image:url(/static/images/marker-icon-2x-red.png);
+      }
+      .leaflet-marker-orange{
+         background-image:url(/static/images/marker-icon-2x-orange.png);
+      }
+      .leaflet-marker-blue{
+         background-image:url(/static/images/marker-icon-2x-blue.png);
+      }
+      .leaflet-marker-yellow{
+         background-image:url(/static/images/marker-icon-2x-gold.png);
+      }
+      .leaflet-marker-etoile-marron{
+         background-image:url(/static/images/star-marron.png);
+      }
+      .leaflet-marker-gray{
+         background-image:url(/static/images/marker-icon-2x-grey.png);
+      }
+      .leaflet-marker-etoile-blue{
+         background-image:url(/static/images/star-blue.png);
+      }
+      .leaflet-marker-div{
+         display: inline-block;
+      }
+      #image-sideBar-a{
+         width: 36px;
+         height: 36px;
+      }
+      #image-sideBar{
+         width: 100%;
+         height: 100%;
+         margin-left: 10px;
+         object-fit: cover;
+         
+      }
+      #image-navBar{
+         width: 30px;
+         height: 30px;
+         object-fit: cover;
+         margin-left: 10px;
+      }
+      @media (min-width: 769px){
+         #image-sideBar-a{
+            width: 36px;
+            height: 36px!important;
+         }
+         #image-sideBar{ 
+            width: 100%;
+            margin-left: 10px;
+            min-height: 36px;
+            max-height: 36px;
+            object-fit: cover;
+         }
+      }
+      .spinner {
+         position: fixed;
+         z-index: 1031;
+         top: 50%;
+         left: 50%;
+         transform: translate(-50%, -50%);
+      }
+      .leaflet-bottom {
+         display: none;
+      }
+      div.esriControlsBR {
+         display: none;
+      }
+      .tags .tokenfield .token{
+         border-radius: 50px;
+         background-color: #95B9C7;
+      }
+   </style>
+   <body>
+      {% include 'partials/navBar.html' %}
+      <div class="page-container">
+         <!-- Page content -->
+           
+         <div class="page-content">
+         {% include 'partials/sideBar.html' %}
+            <!-- Main content -->
+            <div class="content-wrapper">
+               <!-- Page header -->
+               <!-- /page header -->
+               <!-- Content area -->
+               {% block content %}{% endblock %}
+               <!-- /content area -->
+            </div>
+            
+            <!-- /main content -->
+         </div>
+         <!-- /page content -->
+      </div>
+      <!-- /page container -->
+      <!-- /page container -->
+   </body>
+   <script>
+      window.IP = "http://127.0.0.1:8000/";
+
+      $(document).on('click', '#SubmitButton', function(event){
+         event.preventDefault();
+         var form = $("#formUpload")[0];
+         var dataForm = new FormData(form);
+         var token = $("meta[name='_csrf']").attr("content");
+   
+         $.ajax({
+            type:'POST',
+            url: 'http://127.0.0.1:8000/userChangerImage',
+            headers: {"X-CSRF-TOKEN": token},
+            processData: false,
+            contentType: false,
+            cache: false,
+            data: dataForm,
+            success : function(result,status){
+               var $data = $("<data />").html(result);
+               
+               var erreur = $data.find("#message-Image").data();
+               if(erreur["erreur"] === 1){
+                  $("#photos-caption").replaceWith($data.find("#photos-caption"));
+                  resetImageForm();
+               }
+               else {		
+                  //$("#sidebar").replaceWith($data.find("#sidebar"));
+                  var variable = null;
+                  $("#sidebar").load(location.href + " #sidebar");
+                  $("#navbar").load(location.href + " #navbar");
+                  //$("#navbar").replaceWith($data.find("#navbar"));
+                  $("#photos-caption").replaceWith($data.find("#photos-caption"));
+                  notificationSuccess('success message', 'votre image de profil a été modifié avec succès' );
+                  resetImageForm();
+               }
+   
+            }
+         });
+      });
+/****************************** leaflet script ***************************************************/
+      /****************************** leaflet script ***************************************************/
+      /*icon leaflet orange image change*/
+      function orangeIcon(label){
+         return new L.divIcon({
+            className: "leaflet-marker-div",
+            html: '<span class="leaflet-marker-label leaflet-marker-orange">'+label+'</span>',
+            iconSize: [25, 41]
+         });
+      }
+      /*icon leaflet blue image change*/
+      function blueIcon(label){
+         return new L.divIcon({
+            className: "leaflet-marker-div",
+            html: '<span class="leaflet-marker-label leaflet-marker-blue">'+label+'</span>',
+            iconSize: [25, 41]
+         });
+      }
+      /*icon leaflet yellow image change*/
+      function yellowIcon(label){
+         return new L.divIcon({
+            className: "leaflet-marker-div",
+            html: '<span class="leaflet-marker-label leaflet-marker-yellow">'+label+'</span>',
+            iconSize: [25, 41]
+         });
+      }
+      /*icon leaflet marron star image change*/
+      function orangeStarIcon(label){
+         return new L.divIcon({
+            className: "leaflet-marker-div",
+            html: '<span class="leaflet-marker-label-etoile leaflet-marker-etoile-marron">'+label+'</span>',
+            iconSize: [35, 41]
+         });
+      }
+      /*icon leaflet marron star image change*/
+      function BlueStarIcon(label){
+         return new L.divIcon({
+            className: "leaflet-marker-div",
+            html: '<span class="leaflet-marker-label-etoile leaflet-marker-etoile-blue">'+label+'</span>',
+            iconSize: [35, 41]
+         });
+      }
+      /*icon leaflet marron star image change*/
+      function GrayIcon(label){
+         return new L.divIcon({
+            className: "leaflet-marker-div",
+            html: '<span class="leaflet-marker-label leaflet-marker-gray">'+label+'</span>',
+            iconSize: [35, 41]
+         });
+      }
+      /* icon leaflet red */
+      function redIcon(){
+            return new L.divIcon({
+            className: "leaflet-marker-div",
+            html: '<span class="leaflet-marker-label leaflet-marker-red">'+'</span>',
+            iconSize: [25, 41]
+         });
+      }
+      /****************************** fin leaflet script ***************************************************/
+      // vider le formualaire actualisation
+      $("#AjouterActualisation").on('hidden.bs.modal', function () {
+         var idPin = $("#pin_id_actualisation").val();
+         $("#ajout-actualisation-form")[0].reset();
+         $("#pin_id_actualisation").val(idPin);
+      });
+      // vider le formulaire d'import csv
+      $("#modalCSV").on('hidden.bs.modal', function () {
+         $("#importCSV")[0].reset();
+         $("#selected-csv").html('No file selected');
+      });
+      // vider le formulaire de la note 
+      $("#modal_note").on('hidden.bs.modal', function () {
+         $("#contentNote").val('');
+      });
+      $("#file_CSV").change(function(e){
+         var length = document.getElementById("file_CSV").files.length
+         var myFile = $('#file_CSV').prop('files')[0];
+         if(length != 0){
+            var fileName = e.target.files[0].name;
+            $("#selected-csv").html(fileName);
+         }
+         else{
+            $("#selected-csv").html('No file selected');
+         }
+      });
+      /*ajout de pagination et de la barre de recherche dans les tables*/
+      $('.table').dataTable({
+         autoWidth: false,
+         columnDefs: [{ 
+            orderable: false,
+            width: '100px'
+         }],
+         dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
+         language: {
+            search: '<span>Filtrer:</span> _INPUT_',
+            searchPlaceholder: 'Type to filter...',
+            lengthMenu: '<span>Show:</span> _MENU_',
+            paginate: { 'first': 'First', 'last': 'Last', 'next': '&rarr;', 'previous': '&larr;' }
+         },
+         drawCallback: function () {
+            $(this).find('tbody tr').slice(-3).find('.dropdown, .btn-group').addClass('dropup');
+         },
+         preDrawCallback: function() {
+            $(this).find('tbody tr').slice(-3).find('.dropdown, .btn-group').removeClass('dropup');
+         }
+      });
+      /* my map page consultaion with ajax*/
+      MyMapPermission();
+      function MyMapPermission(){
+         $(document).on('click',"#Mymap-click", function(e){
+           e.preventDefault();
+           var token = $("meta[name='_csrf']").attr("content");
+           		$.ajax({
+                  type:'GET',
+                  url: 'http://127.0.0.1:8000/map/',
+                  headers: {"X-CSRF-TOKEN": token},
+                  success : function(result,status){
+                     
+                     var $data = $("<data />").html(result);
+                     var erreur = $data.find("#message-my-map").data();
+                     
+                     if(typeof erreur != 'undefined' && erreur["erreur"] === 1){
+                        notification("Désolé, votre pack ne contient My Map, Veuillez demander le compte PREMIUM ou PREMIUM PLUS");
+                     }
+                     else{
+                        top.location.href = 'http://127.0.0.1:8000/map/';
+                     }
+                  }
+               });
+        });
+      }
+      /*notification de Success*/
+      function notificationSuccess(titre, message){
+			new PNotify({
+            title: titre,
+            text: message,
+            icon: 'icon-checkmark3',
+            type: 'success',
+			   addclass: 'pnotify-center'
+        });
+		}
+      /*notification info*/
+      function notificationInfo(titre, message){
+         new PNotify({
+            title: titre,
+            text: message,
+			   addclass: 'pnotify-center bg-info'
+        });
+      }
+      /* fonction des notifications d'alerte*/
+      function notification(message){
+         new PNotify({
+            title: 'OOups',
+            text: message,
+            closer_hover: false,
+            sticker_hover: false,
+            addclass: 'pnotify-center',
+            delay: 3000,
+            history: false,
+            sticker: true
+         });
+      }
+      function getCookie(name){
+         var cookieValue = null;
+         if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++){
+               var cookie = cookies[i].trim();
+               // Does this cookie string begin with the name we want?
+               if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+               }
+            }
+         }
+         return cookieValue;
+      }
+      var csrftoken = getCookie('csrftoken');
+      $(".form-control").focus(function(){
+         $( this ).css({"border-color": "#8000bdff", "box-shadow": "0 0 0 0.2rem rgb(0 123 255 / 25%)"});
+      });
+      $(".form-control").blur(function(){
+         $( this ).css({"border-color": "#ced4da", "box-shadow": "none"})
+      });
+      $("#IdTypeBien").change(function(){
+         $( "#DivTypeDeBien .select2-selection" ).css({"border-color": "#ced4da", "box-shadow": "none"});
+      });
+      $("#IdTypeBien").click(function(){
+         $( "#DivTypeDeBien .select2-selection" ).css({"border-color": "#8000bdff", "box-shadow": "0 0 0 0.2rem rgb(255 0 0 / 25%)"});
+      });
+      $("#IdVilles").change(function(){
+         $( "#DivVilles .select2-selection" ).css({"border-color": "#ced4da", "box-shadow": "none"});
+      });
+      /* gerer affichage du chute fonciere lors de creation*/
+      $("#IdTypeBienNew").change(function(){
+         typederef = $("#type_de_reference").val();
+         typedebien =this.value;
+         if(typederef === '1' && (typedebien === "2" || typedebien === "3" || typedebien === "5" || typedebien === "6") ){
+            $("#chute_fonciere_new").show();
+         }
+         else{
+           $("#chute_fonciere_new").hide();
+           $("#chute_fonciere").val('');
+         }
+      });
+      $("#type_de_reference").change(function(){
+         typederef = this.value;
+         typedebien = $("#IdTypeBienNew").val();
+         if(typederef === '1' && (typedebien === "2" || typedebien === "3" || typedebien === "5" || typedebien === "6") ){
+            $("#chute_fonciere_new").show();
+         }
+         else{
+           $("#chute_fonciere_new").hide();
+           $("#chute_fonciere").val('');
+         }
+         $("#localisee").prop("checked", true).trigger("click");
+
+         if(this.value === '1' || this.value === '2'){
+            $("#is_localized").show();
+         }
+         else{
+            $("#is_localized").hide();
+         }
+         if(typederef === '2') {
+            $("#label-prix-total-loyer-new").show();
+            $("#label-prix-unitaire-loyer-new").show();
+            $("#label-prix-unitaire-vente-new").hide();
+            $("#label-prix-total-vente-new").hide();
+            $("#prix_unit").attr("placeholder", "Loyer unitaire du bien");
+            $("#prix_total").attr("placeholder", "Loyer total du bien");
+         
+         }
+         else {
+            $("#label-prix-total-loyer-new").hide();
+            $("#label-prix-unitaire-loyer-new").hide();
+            $("#label-prix-unitaire-vente-new").show();
+            $("#label-prix-total-vente-new").show();
+            $("#prix_unit").attr("placeholder", "Prix unitaire du bien");
+            $("#prix_total").attr("placeholder", "Prix total du bien");
+         }
+      });
+      /* gerer affichage du chute fonciere lors de l'edition*/
+      $("#IdTypeBienUpdate").change(function(){
+         typederef = $("#selected_type_reference_update").val();
+         typedebien = this.value ;
+         if(typederef === '1' && (typedebien === "2" || typedebien === "3" || typedebien === "5" || typedebien === "6") ){
+            $("#chute_fonciere_edit").show();
+         }
+         else{
+           $("#chute_fonciere_edit").hide();
+           $("#chute_fonciereEdt").val('');
+         }
+      });
+      $("#selected_type_reference_update").change(function() {
+         typederef = this.value;
+         typedebien = $("#IdTypeBienUpdate").val();
+         if(typederef === '1' && (typedebien === "2" || typedebien === "3" || typedebien === "5" || typedebien === "6") ){
+            $("#chute_fonciere_edit").show();
+         }
+         else{
+           $("#chute_fonciere_edit").hide();
+           $("#chute_fonciereEdt").val('');
+         }
+         $("#localisee_update").prop("checked", true).trigger("click");
+         if(this.value === '3'){
+            $("#is_localized_update").hide();
+           
+         }
+         else{
+            $("#is_localized_update").show();
+         }
+         if(typederef === '2'){
+            $("#label-prix-total-loyer-update").show();
+            $("#label-prix-unitaire-loyer-update").show();
+            $("#label-prix-total-vente-update").hide();
+            $("#label-prix-unitaire-vente-update").hide();
+            $("#prix_unit_update").attr("placeholder", "Loyer unitaire du bien");
+            $("#prix_total_update").attr("placeholder", "Loyer total du bien");
+         }
+         else{
+            $("#label-prix-total-loyer-update").hide();
+            $("#label-prix-unitaire-loyer-update").hide();
+            $("#label-prix-total-vente-update").show();
+            $("#label-prix-unitaire-vente-update").show();
+            $("#prix_unit_update").attr("placeholder", "Prix unitaire du bien");
+            $("#prix_total_update").attr("placeholder", "Prix total du bien");
+         }
+      });
+      $('#IdTypeBien').on('select2:open', function (e) {
+         $( "#DivTypeDeBien .select2-selection" ).css({"border-color": "#8000bdff", "box-shadow": "0 0 0 0.2rem rgb(0 123 255 / 25%)", "border-radius": "3px"});
+      });
+      $('#IdTypeBien').on('select2:close', function (e) {
+         $( "#DivTypeDeBien .select2-selection" ).css({"border-color": "#8000bdff", "box-shadow": "none"});
+      });
+      $('#IdVilles').on('select2:open', function (e) {
+         $( "#DivVilles .select2-selection" ).css({"border-color": "#8000bdff", "box-shadow": "0 0 0 0.2rem rgb(0 123 255 / 25%)", "border-radius": "3px"});
+      });
+      $('#IdVilles').on('select2:close', function (e) {
+         $( "#DivVilles .select2-selection" ).css({"border-color": "#8000bdff", "box-shadow": "none"});
+      });
+      prep_modal();
+      function prep_modal(){
+         $(".modal").each(function() {
+            var element = this;
+	         var pages = $(this).find('.modal-split');
+            if (pages.length != 0){
+    	         pages.hide();
+    	         pages.eq(0).show();
+    	         var b_button = document.createElement("button");
+               b_button.setAttribute("type","button");
+               b_button.setAttribute("class","btn-split btn btn-primary");
+               b_button.setAttribute("style","display: none;");
+               b_button.innerHTML = "Back";
+             	var n_button = document.createElement("button");
+               n_button.setAttribute("type","button");
+               n_button.setAttribute("class","btn-split btn btn-primary");
+               n_button.innerHTML = "Next";
+               $(this).find('.modal-footer').append(b_button).append(n_button);
+               var page_track = 0;
+               $(n_button).click(function() {
+                  this.blur();
+             		if(page_track == 0){
+    			         $(b_button).show();
+                  }
+    		         if(page_track == pages.length-2){
+    			         $(n_button).text("Submit");
+                  }
+                  if(page_track == pages.length-1){
+                     $(element).find("form").submit();
+                  }
+                  if(page_track < pages.length-1){
+                     page_track++;
+                     pages.hide();
+                     pages.eq(page_track).show();
+                  }
+             	});
+               $(b_button).click(function() {
+                  if(page_track == 1){
+                     $(b_button).hide();
+                  }
+                  if(page_track == pages.length-1){
+                     $(n_button).text("Next");
+                  }
+                  if(page_track > 0){
+                     page_track--;
+                     pages.hide();
+                     pages.eq(page_track).show();
+                  }
+               });
+            }
+         });
+      }
+      /* add new piece jointes create_pin form*/
+      var nbr_click=0;
+      $("#new_piece_jointe").on('click', function(event){
+         if(nbr_click < 4){
+            $(".new_piece_jointe").prevAll(".new_piece_jointe:hidden:first").show();
+            nbr_click++;
+         }
+         if(nbr_click===4){
+            $("#new_piece_jointe").prev(".new_piece_jointe").show();
+            nbr_click++;
+         }
+         if(nbr_click >= 5){
+            notificationInfo('Attention', "Vous pouvez inserer seulement 5 pièces jointes");
+         }
+      });
+      /*modal_default hide function create_my_pin*/
+      on_modal_hide_createNewPin();
+      function on_modal_hide_createNewPin(){
+         $("#modal_default").on('hidden.bs.modal', function () {
+            var lat= $("#latitudeInput").val();
+            var lng=$("#longitudeInput").val();
+            // reset form
+            const formData = new FormData($("#create_pin")[0]); 
+            $('#create_pin select').val('').change();
+            $("#create_pin")[0].reset();
+            $('#tag').tokenfield('setTokens', []);
+            formData.delete('docs');
+            dzClosure.removeAllFiles();
+            formData.delete('file');
+            $("#selected-file").html('No file selected');
+            $("#selected-file-2").html('No file selected');
+            $("#selected-file-3").html('No file selected');
+            $("#selected-file-4").html('No file selected');
+            $("#selected-file-5").html('No file selected');
+            $("#localisee").prop("checked", true).trigger("click");
+            $("#longitudeInput").val(lng);
+            $("#latitudeInput").val(lat)
+            $(".new_piece_jointe").hide();
+            var pages = $('.modal-split'); 
+            $('#modal_default .btn-split').detach();
+            pages.eq(0).show();
+            prep_modal();
+         });
+      }
+      /* etat du pin*/
+      var mySwitch = new Switchery($('#mySwitchCheck')[0], {
+         size:"small",
+         color: '#0D74E9'
+      });
+      $("#modal_doc").on('hidden.bs.modal', function () {
+         var pin_id = $("#pin_id_fichier").val();
+         $('#piece_jointe_modif select').val('').change();
+         $("#piece_jointe_modif")[0].reset();
+         $("#selected-file-modify-pj").html('No file selected');
+         $("#pin_id_fichier").val(pin_id);
+      });
+      $("#modal_photographies").on('hidden.bs.modal', function () {
+         const formData = new FormData($("#photographies_modif")[0]); 
+         var pin_id = $("#pinId-photographies").val();
+         $('#photographies_modif select').val('').change();
+         $("#photographies_modif")[0].reset();
+         dzClosure_modification.removeAllFiles();
+         formData.delete('file');
+         $("#pinId-photographies").val(pin_id);
+      });
+      $('#input-piece-jointe-modify').change(function(e){
+         var length = document.getElementById("input-piece-jointe-modify").files.length
+         var myFile = $('#input-piece-jointe-modify').prop('files')[0];
+         if(length != 0){
+         var fileName = e.target.files[0].name;
+         $("#selected-file-modify-pj").html(fileName);
+         }
+         else{
+            $("#selected-file-modify-pj").html('No file selected');
+         }
+      });
+      /************************** connected.html script *****************************************************/     
+      /*changer image with ajax*/
+		$("#SubmitButton").off('click').on('click', function(event){
+			event.preventDefault();
+			var form = $("#formUpload")[0];
+			var dataForm = new FormData(form);
+			var token = $("meta[name='_csrf']").attr("content");
+
+			$.ajax({
+				type:'POST',
+				url: 'http://127.0.0.1:8000/userChangerImage',
+				headers: {"X-CSRF-TOKEN": token},
+				processData: false,
+				contentType: false,
+				cache: false,
+				data: dataForm,
+				Success : function(result,status){
+					var $data = $("<data />").html(result);
+					
+					var erreur = $data.find("#message-Image").data();
+					if(erreur["erreur"] === 1){
+						$("#photos-caption").replaceWith($data.find("#photos-caption"));
+						resetImageForm();
+					}
+					else {		
+						$("#sidebar").replaceWith($data.find("#sidebar"));
+						$("#navbar").replaceWith($data.find("#navbar"));
+						$("#photos-caption").replaceWith($data.find("#photos-caption"));
+						notificationSuccess('Success message', 'Votre image de profil a été modifié avec succès' );
+						resetImageForm();
+						//MyMapPermission();
+					}
+
+				}
+			});
+	   });
+      function RemoveImageProfil(){
+         alert("remove photo");
+			var token = $("meta[name='_csrf']").attr("content");
+         $.ajax({
+            type:'GET',
+            url: 'http://127.0.0.1:8000/userRemoveImage/',
+            headers: {"X-CSRF-TOKEN": token},
+            Success : function(data,status){
+               var $data = $("<data />").html(data);
+               $("#sidebar").replaceWith($data.find("#sidebar"));
+               $("#navbar").replaceWith($data.find("#navbar"));
+               $("#photos-caption").replaceWith($data.find("#photos-caption"));
+               notificationSuccess('Success message', 'Votre image de profil a été supprimé avec succès' );
+               resetImageForm();
+            }
+         });
+      }
+      function addCommas(nStr) {
+         nStr += '';
+         var x = nStr.split('.');
+         var x1 = x[0];
+         var x2 = x.length > 1 ? '.' + x[1] : '';
+         var rgx = /(\d+)(\d{3})/;
+         while (rgx.test(x1)) {
+             x1 = x1.replace(rgx, '$1' + ' ' + '$2');
+         }
+         return x1 + x2;
+      }
+
+      function getTypeDeBien(idBien){
+         switch(idBien) {
+            case 1:
+               return "Residentiel"
+               break;
+            case 2:
+               return "Villa"
+               break;
+            case 3:
+               return "Maison"
+               break;
+            case 4:
+               return "Professionnel"
+               break;
+            case 5:
+               return "Commercial"
+               break;
+            case 6:
+               return "Industriel"
+               break;
+            case 7:
+               return "Terrain nu villa"
+               break;
+            case 8:
+               return "Terrain nu industriel"
+               break;
+            case 9:
+               return "Terrain nu urbain"
+               break;
+            case 10:
+               return "Terrain nu agricole"
+               break;
+         } 
+      }
+      function getTypeDeReference(idTypeRef){
+         switch(idTypeRef) {
+            case 1:
+            return "Vente"
+            break;
+            case 2:
+            return "Location"
+            break;
+            case 3:
+               return "Rapport"
+               break; 
+         }
+      }
+      function isNumber(evt){
+         evt = (evt) ? evt : window.event;
+         var charCode = (evt.which) ? evt.which : evt.keyCode;
+         if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+         }
+         return true; 
+      }
+      function getTypeDeBien(idBien){
+         switch(idBien) {
+            case 1:
+            return "Residentiel"
+            break;
+            case 2:
+               return "Villa"
+            break;
+            case 3:
+               return "Maison"
+               break;
+            case 4:
+               return "Professionnel"
+               break;
+            case 5:
+               return "Commercial"
+               break;
+            case 6:
+               return "Industriel"
+               break;
+            case 7:
+               return "Terrain Villa"
+               break;
+            case 8:
+               return "Terrain Industriel"
+               break;
+            case 9:
+               return "Terrain urbain"
+               break;
+            case 10:
+               return "Terrain agricole"
+               break;
+         } 
+      }
+      function getTypeDeReference(idTypeRef){
+         switch(idTypeRef) {
+            case 1:
+            return "Vente"
+            break;
+            case 2:
+            return "Location"
+            break;
+            case 3:
+               return "Rapport"
+               break; 
+         }
+      }
+
+      function isNumber(evt){
+         evt = (evt) ? evt : window.event;
+         var charCode = (evt.which) ? evt.which : evt.keyCode;
+         if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+         }
+         return true; 
+      }
+      var entredDecimal='';
+      function isDecimal(evt){
+         evt = (evt) ? evt : window.event;
+         Inputvalue = event.target.value;
+         console.log("Inputvalue: ", Inputvalue);
+         var charCode = (evt.which) ? evt.which : evt.keyCode;
+         /* exeption de . et de ,*/
+         if( ( Inputvalue.indexOf(',') === -1 && Inputvalue.indexOf('.') === -1 && charCode === 46 ) ||  ( Inputvalue.indexOf('.') === -1 && Inputvalue.indexOf(',') === -1 &&  charCode === 44 ) ){
+            return true; 
+         }
+         else{
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+               return false;
+            }
+            return true;
+         }
+      }
+      function editActualisationCLick(){
+         $('#myDeleteMessage').modal('toggle');
+         $('#confirm').off('click').on('click', function(event){
+            event.preventDefault();
+            checkbox_status = true;
+            var url = 'http://127.0.0.1:8000/map/edit_actu/'+pk+'/'+id+'/'
+            fetch(url)
+            .then((resp) => resp.json())
+            .then(function(data){
+               if(data.id!=0  && typeof data.id != 'undefined'){
+                  notificationSuccess('Success message', "L'actualisation est supprimée avec succès" );
+                  $('#myDeleteMessage').modal('toggle');
+                  $("#content").hide();
+               }
+               else{
+                  notification(data['message']);
+               }
+            });
+         });
+      }
+      function removeActualisationClick(pk,id){
+         $('#myDeleteMessage').modal('toggle');
+         $('#confirm').off('click').on('click', function(event){
+            event.preventDefault();
+            checkbox_status = true;
+            var url = 'http://127.0.0.1:8000/map/delete_actu/'+pk+'/'+id+'/'
+            fetch(url)
+            .then((resp) => resp.json())
+            .then(function(data){
+               if(data.id!=0  && typeof data.id != 'undefined'){
+                  notificationSuccess('Success message', "L'actualisation est supprimée avec succès" );
+                  $('#myDeleteMessage').modal('toggle');
+                  $("#content").hide();
+               }
+               else{
+                  notification(data['message']);
+               }
+            });
+         });
+      }
+</script>
+</html>

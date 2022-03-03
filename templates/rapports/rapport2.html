@@ -137,39 +137,6 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <table class="table table-striped media-library table-lg" id="ul-docs" >
-                                    <thead>
-                                        <tr>
-                                            <th>Affaire</th>
-                                            <th>Date</th>
-                                            <th>Titre(s) foncier(s)</th>
-                                            <th>Fichier pdf</th>
-                                            <!--<th>Actions</th>-->
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-										{% for rapport in data %}
-										<tr>
-                                            <td>{{rapport.affaire}}</td>
-                                            <td>{{rapport.date}}</td>
-                                            <td>{{rapport.tf}}</td>
-                                            <td><a href="{{rapport.fichier_pdf_genere}}">{{rapport.refernce}}</a></td>
-                                            <!--<td class="text-center">
-												<ul class="icons-list">
-													<li class="dropdown">
-														<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-															<i class="icon-menu9"></i>
-														</a>
-														<ul class="dropdown-menu dropdown-menu-right">
-															<li><a href="#"><i class="icon-file-pdf"></i> Afficher le rapport</a></li>
-														</ul>
-													</li>
-												</ul>
-											</td>-->
-                                        </tr>
-										{% endfor %}
-                                    </tbody>
-                                </table>
                             </div>
 
                             <!-- /profile info -->
@@ -214,7 +181,7 @@
 	
 	function getDocs(pin_id){
 		$("#ul-docs").hide();
-		var url = 'http://127.0.0.1:8000/rapports/'
+		var url = 'http://127.0.0.1:8000/rapports/filterRapport'
 		fetch(url)
 		.then((resp) => resp.json())
 		.then(function(data){

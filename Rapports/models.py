@@ -10,6 +10,8 @@ class Rapport(models.Model):
     affaire = models.CharField(max_length=50, null=True, blank=True)
     refernce = models.CharField(max_length=50, null=True, blank=True)
     date = models.DateField(null=True, blank=True)
-    tf = models.CharField(max_length=20, null=True, blank=True)
+    tf = models.CharField(max_length=256, null=True, blank=True)
     fichier_pdf_genere = models.FileField(upload_to='RapportsPDF/%Y/%m/%d/',null=True, blank=True, validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
+    code_rapport = models.CharField(max_length=50, null=True, blank=True)
+    valorisation = models.BigIntegerField(null=True, blank=True)
     

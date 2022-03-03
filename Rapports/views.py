@@ -11,6 +11,26 @@ import logging
 from .serializers import RapportsSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from django.shortcuts import render
+from django.utils.translation import gettext_lazy as _
+
+VIEW_ERRORS = {
+    404: {'title': _("404 - Page not found"),
+          'content': _("A 404 Not found error indicates..."), },
+    500: {'title': _("Internal error"),
+          'content': _("A 500 Internal error means..."), },
+    403: {'title': _("Permission denied"),
+          'content': _("A 403 Forbidden error means ..."), },
+    400: {'title': _("Bad request"),
+          'content': _("A 400 Bad request error means ..."), }, }
+def error_view_handler(request, exception, status):
+    return render(request, template_name='partials/errors.html', status=status,
+                  context={'error': exception, 'status': status,
+                           'title': VIEW_ERRORS[status]['title'],
+                           'content': VIEW_ERRORS[status]['content']})
+
+def error_404_view_handler(request, exception=None):
+    return error_view_handler(request, exception, 404)
 
 # Create your views here.
 @login_required(login_url='login')
@@ -45,6 +65,7 @@ def GetRapport(request):
         piece_jointes = Rapport.objects.filter(client_id=request.user.id)
     else:
         piece_jointes = Rapport.objects.all()
+    piece_jointes = Rapport.objects.all()
     serializer = RapportsSerializer(piece_jointes, many=True)
         
     context = {
@@ -82,4 +103,22 @@ def serve_protected_document(request, relative_path):
             absolute_path = '{}/{}'.format(settings.MEDIA_ROOT, relative_path)
             response = FileResponse(open(absolute_path, 'rb'), as_attachment=True)
             return response
+
+
+@api_view(['GET'])
+def filterRapport(request, code):
+    
+    if (Rapport.objects.filter(code_rapport=code).exists() == True):
+        rapport = Rapport.objects.filter(code_rapport=code)
+        print("Rapport -> ", rapport)
+        
+        serializer = RapportsSerializer(rapport, many=True)
+            
+        context = {
+            'rapport': rapport
+        }
+        print("context -> ", context)
+        return render(request, 'rapports/rapport.html', context)
+    else:
+        return error_404_view_handler(request)
 

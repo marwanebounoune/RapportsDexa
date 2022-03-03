@@ -19,7 +19,5 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('Accounts.urls')),
-    path('rapports', include('Rapports.urls')),
-    path('media/<path:relative_path>', serve_protected_document, name='document-download'),
+    path('rapports/', include('Rapports.urls')),
 ]
