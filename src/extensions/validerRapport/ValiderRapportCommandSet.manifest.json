@@ -23,13 +23,23 @@
         },
         "COMMAND_2": {
             "title": { "default": "Rapport livré" },
-            "iconImageUrl": "icons/request.png",
+            "iconImageUrl": "https://agroupma.sharepoint.com/sites/DEXA2022/SiteAssets/livrer.png",
             "type": "command"
         },
         "COMMAND_3": {
             "title": { "default": "Réclamation" },
-            "iconImageUrl": "icons/request.png",
+            "iconImageUrl": "https://agroupma.sharepoint.com/sites/DEXA2022/SiteAssets/devalidation.png",
             "type": "command"
         },
+        "COMMAND_4": {
+            "title": { "default": "Demander la validation" },
+            "iconImageUrl": "https://agroupma.sharepoint.com/sites/DEXA2022/SiteAssets/demanderValidation.jpg",
+            "type": "command"
+        },
+        "COMMAND_5": {
+            "title": { "default": "Dévalider le rapport" },
+            "iconImageUrl": "https://agroupma.sharepoint.com/sites/DEXA2022/SiteAssets/devalidation.png",
+            "type": "command"
+        }
     }
 }
