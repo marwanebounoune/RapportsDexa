@@ -9,6 +9,8 @@ import {
 import { Dialog } from '@microsoft/sp-dialog';
 
 import ConfirmationDialog from './components/ConfirmationDialog';
+import EvaluationDialog from './components/EvaluationDialog';
+import ValidationDialog from './components/ValidationDialog';
 import "@pnp/sp/folders";
 import { generateCodeValidation, getUser, isFalsy } from './utils';
 import { sp } from "@pnp/sp/presets/all";
@@ -76,6 +78,10 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
     //console.log("finale_code:  ", codeValidation)
     //console.log("validateur", isValidateur);
     const confirmationDialog: ConfirmationDialog = new ConfirmationDialog();
+    const evaluationDialog: EvaluationDialog = new EvaluationDialog();
+    const validationDialog: ValidationDialog = new ValidationDialog();
+
+
     switch (event.itemId) {
       case 'COMMAND_1':
         var query = function(element) {
@@ -88,15 +94,25 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
           isValidateur = false;
           isLivreur = false;
         });
-        confirmationDialog.userEmail=userEmail;
-        confirmationDialog.Libraryurl=Libraryurl;
-        confirmationDialog.rapports= rapports;
-        // console.log("rapports", rapports)
-        confirmationDialog.statut="Validé";
+        validationDialog.userEmail=userEmail;
+        validationDialog.Libraryurl=Libraryurl;
+        validationDialog.rapports= rapports;
+        let FileLeafRef = rapport.getValueByName("FileLeafRef");
+        let SurfConstr = "";
+        let SurfTerr = "";
+        let SurfPond = "";
+        let PrixEval = "";
+        validationDialog.statut="Validé";
         const ID = rapport.getValueByName("ID");
-        let itemAvantValid = await sp.web.lists.getByTitle(Libraryurl).items.getById(ID).get();
-        // console.log("itemAvantValid", itemAvantValid);
-        confirmationDialog.title= "Êtes vous sûr de vouloir valider ce rapport?";
+        await sp.web.lists.getByTitle(Libraryurl).items.getById(ID).get().then(res =>{
+          SurfPond = res["Surface_x0020_pond_x00e9_r_x00e9_e"]
+          SurfConstr = res["Surface_x0020_construite"]
+          SurfTerr = res["Surface_x0020_terrain"]
+          PrixEval = res["Prix_x0020_total_x0020_de_x0020_la_x0020_r_x00e9_f_x00e9_rence"]
+        });
+        validationDialog.Libraryurl = Libraryurl;
+        validationDialog.ID = ID
+        validationDialog.title= "Êtes vous sûr de vouloir valider "+FileLeafRef+" avec une SP de "+SurfPond+" m2, SC de "+SurfConstr+" m2, ST de "+SurfTerr+" m2 et un montant d'evaluation de "+PrixEval+" Dhs?";
         if(isValidateur){
           if( (isFalsy(rapport.getValueByName("Titre_x0020_foncier"))
             || isFalsy(rapport.getValueByName("Type_x0020_de_x0020_bien"))
@@ -108,7 +124,7 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
               Dialog.alert(`Veuillez remplir les informations du rapport.`);
           }
           else{
-            confirmationDialog.show();
+            validationDialog.show();
           }
         }
         else{
@@ -138,11 +154,11 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
           Dialog.alert(`Vous n'êtes pas autorisé à effectuer cette action.`);
         break;
       case 'COMMAND_4':
-        confirmationDialog.userEmail=userEmail;
-        confirmationDialog.Libraryurl=Libraryurl;
-        confirmationDialog.rapports= rapports;
-        confirmationDialog.statut="Traité";
-        confirmationDialog.title= 'Êtes vous sûr à demander la validation de ce rapport?';
+        evaluationDialog.userEmail=userEmail;
+        evaluationDialog.Libraryurl=Libraryurl;
+        evaluationDialog.rapports= rapports;
+        evaluationDialog.statut="Traité";
+        evaluationDialog.title= 'Êtes vous sûr à demander la validation de ce rapport?';
         let id_rapport:number = rapport.getValueByName("ID");
         // console.log("Rapport ", id_rapport)
         let item2 = await sp.web.lists.getByTitle(Libraryurl).items.getById(id_rapport).get()
@@ -153,13 +169,8 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
           && item2.Ville_x0020_clientId != null 
           && item2.visiteur_refId != null
           && item2.Date_x0020_de_x0020_visite != null
-          // && item2.Surface_x0020_construite != null
-          // && item2.Surface_x0020_pond_x00e9_r_x00e9_e != null
-          // && item2.Surface_x0020_terrain != null
-          // && item2.Prix_x0020_total_x0020_de_x0020_la_x0020_r_x00e9_f_x00e9_rence != null
-          // && item2.Latitude_Longitude != null
         ){
-          confirmationDialog.show();
+          evaluationDialog.show();
         }
         else{
           Dialog.alert(`Veuillez remplir les informations du rapport.`);

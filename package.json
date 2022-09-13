@@ -9,6 +9,7 @@
     "test": "gulp test"
   },
   "dependencies": {
+    "@material-ui/core": "^4.12.4",
     "@material-ui/lab": "^4.0.0-alpha.60",
     "@microsoft/decorators": "^1.13.0",
     "@microsoft/sp-core-library": "1.13.0",
