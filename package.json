@@ -13,9 +13,10 @@
     "@material-ui/lab": "^4.0.0-alpha.60",
     "@microsoft/decorators": "^1.13.0",
     "@microsoft/sp-core-library": "1.13.0",
-    "@microsoft/sp-dialog": "^1.14.0",
+    "@microsoft/sp-dialog": "^1.15.2",
     "@microsoft/sp-listview-extensibility": "1.13.0",
-    "@pnp/sp": "^2.13.0",
+    "@pnp/sp": "^2.14.0",
+    "qrcode": "^1.5.1",
     "sp-pnp-js": "^3.0.10"
   },
   "devDependencies": {

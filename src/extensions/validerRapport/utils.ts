@@ -24,3 +24,11 @@ export function isFalsy(variableValue:any){
      }
      return true;
 }
+export const b64ToBlob = (base64: string, type: string = 'application/octet-stream'): Blob => {  
+    const byteArray = Uint8Array.from(
+      window.atob(base64.replace("data:image/png;base64,",""))  
+        .split('')  
+        .map((char) => char.charCodeAt(0)) 
+    );  
+    return new Blob([byteArray], { type });  
+};  

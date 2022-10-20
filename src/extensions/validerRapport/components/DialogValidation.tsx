@@ -1,14 +1,14 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { BaseDialog, IDialogConfiguration } from '@microsoft/sp-dialog';
-import ValidationDialogContent from './ValidationDialogContent';
+import DialogValidationContent from './DialogValidationContent';
 import { sp } from "@pnp/sp/presets/all";
 import "@pnp/sp/folders";
 import { generateCodeValidation, getUser } from '../utils';
 import { Dialog } from '@microsoft/sp-dialog';
 import Download from './Download';
 
-export default class ValidationDialog extends BaseDialog {
+export default class DialogValidation extends BaseDialog {
     public message: string;
     public title: string;
     public userEmail:string;
@@ -24,16 +24,13 @@ export default class ValidationDialog extends BaseDialog {
     public LatLng:string;
     public ID:number;
     ///////////////////////////////////////
-    public context:any;
-    public codeValidation:string;
-    public urlPy:any;
     public itemUrl: string;  
     public base64Image: string;  
     public filename:string;
     public _input:any;
-    
+
     public render(): void {
-        ReactDOM.render(<ValidationDialogContent
+        ReactDOM.render(<DialogValidationContent
         close1={ this.close }
         close2={ this.close }
         title={ this.title }
@@ -94,27 +91,27 @@ export default class ValidationDialog extends BaseDialog {
             console.log("url222222222", url)
             
             const file = await sp.web.getFolderByServerRelativePath(this.itemUrl).files.addUsingPath(this.filename+".docx", "content", {Overwrite: true});
-            console.log("file4", file)
             const item = await file.file.getItem();
-            console.log("item3", item)
             await item.update({
                 TEST: "https://agroupma.sharepoint.com/"+res
             });
             const folder = sp.web.getFolderByServerRelativePath(folderRacine);////"+FileLeafRef);
             const folderItem = await folder.getItem();
             if(itemAvantValid.statut_rapport === "Traité à valider"){
-                // await folderItem.breakRoleInheritance(false);
-                // const { Id: roleDefId } = await sp.web.roleDefinitions.getByName("Gestion-après-validation").get();
-                // const { Id: roleDefI2 } = await sp.web.roleDefinitions.getByName("Collaboration").get();
-                // const groups = await sp.web.siteGroups.getByName("Gestion-après-validation")();
-                // const groups2 = await sp.web.siteGroups.getByName("Direction")();
-                // await folderItem.roleAssignments.add(groups.Id, roleDefId);
-                // await folderItem.roleAssignments.add(groups2.Id, roleDefI2);
+                await folderItem.breakRoleInheritance(false);
+                const a = await sp.web.roleDefinitions.get()
+                console.log("A", a)
+                const { Id: roleDefId } = await sp.web.roleDefinitions.getByName("Gestion-après-validation").get();
+                const { Id: roleDefI2 } = await sp.web.roleDefinitions.getByName("Collaboration").get();
+                const groups = await sp.web.siteGroups.getByName("Gestion-après-validation")();
+                const groups2 = await sp.web.siteGroups.getByName("Direction")();
+                await folderItem.roleAssignments.add(groups.Id, roleDefId);
+                await folderItem.roleAssignments.add(groups2.Id, roleDefI2);
                 await sp.web.lists.getByTitle(Libraryurl).items.getById(id_rapport).update({
-                    // statut_rapport: "Validé à livrer (Administration)",
-                    validateur_refId: userId,
-                    date_x0020_de_x0020_validation: _date,
-                    code_rapport: codeValidation
+                statut_rapport: "Validé à livrer (Administration)",
+                validateur_refId: userId,
+                date_x0020_de_x0020_validation: _date,
+                code_rapport: codeValidation
                 }).then(async (res)=>{
                     const Res = await res.item.get()
                     console.log("res apres validation", Res.Surface_x0020_pond_x00e9_r_x00e9_e)
@@ -140,8 +137,8 @@ export default class ValidationDialog extends BaseDialog {
                 await folderItem.roleAssignments.remove(groups3.Id, roleDefId3);
                 await folderItem.roleAssignments.remove(groups4.Id, roleDefId4);
                 await folderItem.roleAssignments.add(groups5.Id, roleDefId5);
-                await sp.web.lists.getByTitle(Libraryurl).items.getById(id_rapport).update({
-                    statut_rapport: "Validé à livrer (Administration)",
+                let item = await sp.web.lists.getByTitle(Libraryurl).items.getById(id_rapport).update({
+                statut_rapport: "Validé à livrer (Administration)",
                 });
             }
         }); 

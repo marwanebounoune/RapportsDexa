@@ -11,6 +11,7 @@ import { Dialog } from '@microsoft/sp-dialog';
 import ConfirmationDialog from './components/ConfirmationDialog';
 import EvaluationDialog from './components/EvaluationDialog';
 import ValidationDialog from './components/ValidationDialog';
+import DialogValidation from './components/DialogValidation';
 import "@pnp/sp/folders";
 import { generateCodeValidation, getUser, isFalsy } from './utils';
 import { sp } from "@pnp/sp/presets/all";
@@ -39,27 +40,27 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
   @override
   public onListViewUpdated(event: IListViewCommandSetListViewUpdatedParameters) {
     
-    const compareOneCommand: Command = this.tryGetCommand('COMMAND_1');
-    const compareOneTwo: Command = this.tryGetCommand('COMMAND_2');
-    const compareOneTree: Command = this.tryGetCommand('COMMAND_3');
-    const compareOneFour: Command = this.tryGetCommand('COMMAND_4');
-    const compareOneFive: Command = this.tryGetCommand('COMMAND_5');
+    const compareCommandOne: Command = this.tryGetCommand('COMMAND_1');
+    const compareCommandTwo: Command = this.tryGetCommand('COMMAND_2');
+    const compareCommandTree: Command = this.tryGetCommand('COMMAND_3');
+    const compareCommandFour: Command = this.tryGetCommand('COMMAND_4');
+    const compareCommandFive: Command = this.tryGetCommand('COMMAND_5');
     Libraryurl = this.context.pageContext.list.title;
     // console.log("Libraryurl", Libraryurl)
-    if (compareOneCommand) {
-      compareOneCommand.visible = event.selectedRows.length !== 0 && ((event.selectedRows[0].getValueByName("statut_rapport") === "Traité à valider" || event.selectedRows[0].getValueByName("statut_rapport") === "Validé à livrer (Traitement)" || event.selectedRows[0].getValueByName("statut_rapport") === "Réclamation") && (Libraryurl === "Grands Projets 2022" || Libraryurl === "Rapports 2022"));
+    if (compareCommandOne) {
+      compareCommandOne.visible = event.selectedRows.length === 1 && ((event.selectedRows[0].getValueByName("statut_rapport") === "Traité à valider" || event.selectedRows[0].getValueByName("statut_rapport") === "Validé à livrer (Traitement)" || event.selectedRows[0].getValueByName("statut_rapport") === "Réclamation") && (Libraryurl === "Grands Projets 2022" || Libraryurl === "Rapports 2022"));
     }
-    if (compareOneTwo) {
-      compareOneTwo.visible = event.selectedRows.length === 1 && (event.selectedRows[0].getValueByName("statut_rapport") === "Validé à livrer (Administration)" && (Libraryurl === "Grands Projets 2022" || Libraryurl === "Rapports 2022"));
+    if (compareCommandTwo) {
+      compareCommandTwo.visible = event.selectedRows.length === 1 && (event.selectedRows[0].getValueByName("statut_rapport") === "Validé à livrer (Administration)" && (Libraryurl === "Grands Projets 2022" || Libraryurl === "Rapports 2022"));
     }
-    if (compareOneTree) {
-      compareOneTree.visible = event.selectedRows.length === 1 && (event.selectedRows[0].getValueByName("statut_rapport") === "Livré" && (Libraryurl === "Grands Projets 2022" || Libraryurl === "Rapports 2022"));
+    if (compareCommandTree) {
+      compareCommandTree.visible = event.selectedRows.length === 1 && (event.selectedRows[0].getValueByName("statut_rapport") === "Livré" && (Libraryurl === "Grands Projets 2022" || Libraryurl === "Rapports 2022"));
     }
-    if (compareOneFour) {
-      compareOneFour.visible = event.selectedRows.length === 1 && (event.selectedRows[0].getValueByName("statut_rapport") === "Visité à traiter" && (Libraryurl === "Grands Projets 2022" || Libraryurl === "Rapports 2022"));
+    if (compareCommandFour) {
+      compareCommandFour.visible = event.selectedRows.length === 1 && (event.selectedRows[0].getValueByName("statut_rapport") === "Visité à traiter" && (Libraryurl === "Grands Projets 2022" || Libraryurl === "Rapports 2022"));
     }
-    if (compareOneFive) {
-      compareOneFive.visible = event.selectedRows.length === 1 && (event.selectedRows[0].getValueByName("statut_rapport") === "Validé à livrer (Administration)" && (Libraryurl === "Grands Projets 2022" || Libraryurl === "Rapports 2022"));
+    if (compareCommandFive) {
+      compareCommandFive.visible = event.selectedRows.length === 1 && (event.selectedRows[0].getValueByName("statut_rapport") === "Validé à livrer (Administration)" && (Libraryurl === "Grands Projets 2022" || Libraryurl === "Rapports 2022"));
     }
   }
 
@@ -124,7 +125,25 @@ export default class ValiderRapportCommandSet extends BaseListViewCommandSet<IVa
               Dialog.alert(`Veuillez remplir les informations du rapport.`);
           }
           else{
-            validationDialog.show();
+            const codeValidation = generateCodeValidation();
+            var QRCode:any = require('qrcode')
+            var urlPy = "https://www.valactif.com/"
+            //console.log("urlPy -> ", urlPy) 
+            QRCode.toDataURL(urlPy)  
+            .then(url => {
+              console.log("event.selectedRows[0]", event.selectedRows[0])
+              validationDialog.itemUrl = event.selectedRows[0].getValueByName("FileRef");  
+              validationDialog.base64Image = url;  
+              validationDialog.urlPy = urlPy;
+              validationDialog.codeValidation = codeValidation;  
+              validationDialog.filename = event.selectedRows[0].getValueByName("FileLeafRef"); 
+              validationDialog.context = this.context;   
+              validationDialog.show()
+            })
+            .then(()=>{})
+            .catch(err => {  
+              console.error(err)  
+            })
           }
         }
         else{
