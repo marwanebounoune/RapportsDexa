@@ -4,3 +4,4 @@ git commit -m "first commit"
 git push origin master
 
 pip install Office365-REST-Python-Client
+pip install cdata

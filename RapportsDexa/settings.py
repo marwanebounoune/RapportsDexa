@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Accounts.apps.AccountsConfig',
     'Rapports.apps.RapportsConfig',
+    'rest_framework',
+    'office365',
 ]
 
 MIDDLEWARE = [
